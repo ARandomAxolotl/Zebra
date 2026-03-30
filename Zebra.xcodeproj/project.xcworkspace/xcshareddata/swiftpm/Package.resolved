@@ -30,10 +30,10 @@
     {
       "identity" : "sentry-cocoa",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/getsentry/sentry-cocoa.git",
+      "location" : "https://github.com/zbrateam/sentry-cocoa.git",
       "state" : {
-        "revision" : "cf43eac1aa12017868c257ad3854ad87a5de0758",
-        "version" : "7.31.5"
+        "branch" : "main",
+        "revision" : "4cce5f0d4d0194951c3789ee7f53ec7fd40cefdd"
       }
     }
   ],

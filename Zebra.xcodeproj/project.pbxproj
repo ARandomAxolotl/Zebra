@@ -1893,10 +1893,10 @@
 		};
 		4EF1A33D2F7901B3004A1017 /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/getsentry/sentry-cocoa.git";
+			repositoryURL = "https://github.com/zbrateam/sentry-cocoa.git";
 			requirement = {
-				kind = exactVersion;
-				version = 7.31.5;
+				branch = main;
+				kind = branch;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
