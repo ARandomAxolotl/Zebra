@@ -23,6 +23,10 @@
 #import "ZBCanisterPrivacyViewController.h"
 #import "UIImageView+Zebra.h"
 
+#if DEBUG
+@import FLEX;
+#endif
+
 typedef enum ZBHomeOrder : NSUInteger {
     ZBWelcome,
     ZBViews,
@@ -79,16 +83,27 @@ typedef enum ZBInfoOrder : NSUInteger {
     [self.featuredCollection setShowsHorizontalScrollIndicator:NO];
     [self _updateFeaturedCollectionInset];
     [self setupFeatured];
-    
+
     if (@available(iOS 13.0, *)) {
-        UIBarButtonItem *settingsButton = self.navigationItem.rightBarButtonItems[0];
-        self.navigationItem.rightBarButtonItems = nil;
-        self.navigationItem.rightBarButtonItem = settingsButton;
+        // Remove theme toggle
+        self.navigationItem.rightBarButtonItems = @[self.navigationItem.rightBarButtonItems[0]];
     }
     else {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(configureTheme) name:@"darkMode" object:nil];
     }
-    
+
+#if DEBUG
+    // Add FLEX toggle
+    UIBarButtonItem *flexBarItem;
+    if (@available(iOS 13, *)) {
+        flexBarItem = [[UIBarButtonItem alloc] initWithImage:[UIImage systemImageNamed:@"wrench.adjustable.fill"] style:UIBarButtonItemStylePlain target:[FLEXManager sharedManager] action:@selector(toggleExplorer)];
+    } else {
+        flexBarItem = [[UIBarButtonItem alloc] initWithTitle:@"FLEX" style:UIBarButtonItemStylePlain target:[FLEXManager sharedManager] action:@selector(toggleExplorer)];
+    }
+
+    self.navigationItem.rightBarButtonItems = [self.navigationItem.rightBarButtonItems arrayByAddingObject:flexBarItem];
+#endif
+
     if (@available(iOS 11.0, *)) {
         self.navigationController.navigationBar.prefersLargeTitles = YES;
     }

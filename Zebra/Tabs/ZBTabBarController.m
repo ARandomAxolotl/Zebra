@@ -109,10 +109,6 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 
-#if DEBUG
-    [[FLEXManager sharedManager] showExplorer];
-#endif
-
     if ([databaseManager needsToPresentRefresh]) {
         [databaseManager setNeedsToPresentRefresh:NO];
         
