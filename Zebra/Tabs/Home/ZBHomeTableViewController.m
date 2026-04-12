@@ -679,7 +679,7 @@ typedef enum ZBInfoOrder : NSUInteger {
         if (section == NULL) section = @"Unknown";
 
         cell.imageView.sd_imageIndicator = nil;
-        [cell.imageView sd_setImageWithURL:[NSURL URLWithString:currentBanner[@"url"]] placeholderImage:[UIImage imageNamed:section]];
+        [cell.imageView setRetinaImageWithURL:[NSURL URLWithString:currentBanner[@"url"]] placeholderImage:[UIImage imageNamed:section]];
         cell.packageID = currentBanner[@"package"];
         cell.titleLabel.text = currentBanner[@"title"];
     }

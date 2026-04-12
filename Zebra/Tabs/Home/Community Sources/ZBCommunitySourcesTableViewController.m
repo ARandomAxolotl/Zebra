@@ -343,7 +343,7 @@
     cell.urlLabel.textColor = [UIColor secondaryTextColor];
 
     NSURL *iconURL = [NSURL URLWithString:info[@"icon"]];
-    [cell.iconImageView sd_setImageWithURL:iconURL placeholderImage:[UIImage imageNamed:@"Unknown"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+    [cell.iconImageView setRetinaImageWithURL:iconURL placeholderImage:[UIImage imageNamed:@"Unknown"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         [cell.iconImageView setIconImage:image variant:MIIconVariantSettings];
     }];
 

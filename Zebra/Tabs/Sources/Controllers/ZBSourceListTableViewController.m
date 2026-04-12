@@ -106,7 +106,7 @@
         [self setSpinnerVisible:[busyList[[trueSource baseFilename]] boolValue] forCell:cell];
         
         cell.urlLabel.text = [trueSource repositoryURI];
-        [cell.iconImageView sd_setImageWithURL:[trueSource iconURL] placeholderImage:[UIImage imageNamed:@"Unknown"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        [cell.iconImageView setRetinaImageWithURL:[trueSource iconURL] placeholderImage:[UIImage imageNamed:@"Unknown"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
             [cell.iconImageView setIconImage:image variant:MIIconVariantSettings];
         }];
 

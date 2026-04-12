@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <SDWebImage/SDWebImage.h>
 #import "MobileIcons.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -19,6 +20,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setLeftColor:(UIColor *)leftColor rightColor:(UIColor *)rightColor;
 - (void)setIconImage:(UIImage *)image variant:(MIIconVariant)variant;
 - (void)resize:(CGSize)size applyRadius:(BOOL)radius;
+
+- (void)setRetinaImageWithURL:(NSURL *)url placeholderImage:(nullable UIImage *)placeholder completed:(nullable SDExternalCompletionBlock)completion;
+- (void)setRetinaImageWithURL:(NSURL *)url placeholderImage:(nullable UIImage *)placeholder;
 
 @end
 

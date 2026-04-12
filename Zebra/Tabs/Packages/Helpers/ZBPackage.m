@@ -640,8 +640,9 @@
 - (void)setIconImageForImageView:(UIImageView *)imageView variant:(MIIconVariant)variant {
     UIImage *sectionImage = [ZBSource imageForSection:self.section];
     if (self.iconPath) {
-        [imageView sd_setImageWithURL:[NSURL URLWithString:self.iconPath] placeholderImage:sectionImage completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-            [imageView setIconImage:image variant:variant];
+        __weak UIImageView *weakImageView = imageView;
+        [imageView setRetinaImageWithURL:[NSURL URLWithString:self.iconPath] placeholderImage:sectionImage completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            [weakImageView setIconImage:image variant:variant];
         }];
     }
     else {

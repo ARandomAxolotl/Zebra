@@ -10,6 +10,7 @@
 #import "UIImageView+Zebra.h"
 #import "UIView+Private.h"
 #import "UIImage+Private.h"
+#import <SDWebImage/SDWebImage.h>
 
 @implementation UIImageView (Zebra)
 
@@ -126,6 +127,48 @@
         }
         self.clipsToBounds = YES;
     }
+}
+
+- (void)setRetinaImageWithURL:(NSURL *)url placeholderImage:(nullable UIImage *)placeholder completed:(nullable SDExternalCompletionBlock)completion {
+    NSString *urlString = url.absoluteString;
+
+    // If the URL already has a scaled suffix, use it as-is
+    NSRegularExpression *scalePattern = [NSRegularExpression regularExpressionWithPattern:@"@[0-9]+x\\.[^.]+$" options:0 error:nil];
+    if ([scalePattern firstMatchInString:urlString options:kNilOptions range:NSMakeRange(0, urlString.length)]) {
+        [self sd_setImageWithURL:url placeholderImage:placeholder completed:completion];
+        return;
+    }
+
+    UIScreen *screen = self.window.screen ?: [UIScreen mainScreen];
+    NSInteger scale = (NSInteger)screen.scale;
+
+    NSString *extension = url.pathExtension;
+    NSString *base = [url.absoluteString stringByDeletingPathExtension];
+
+    __weak typeof(self) weakSelf = self;
+    __block __weak void (^weakTryScale)(NSInteger);
+    void (^tryScale)(NSInteger) = ^(NSInteger currentScale) {
+        void (^strongTryScale)(NSInteger) = weakTryScale;
+        NSURL *candidate = url;
+        if (currentScale > 1) {
+            candidate = [NSURL URLWithString:[NSString stringWithFormat:@"%@@%ldx.%@", base, (long)currentScale, extension]];
+        }
+
+        [weakSelf sd_setImageWithURL:candidate placeholderImage:placeholder completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            if (error && currentScale > 1) {
+                strongTryScale(currentScale - 1);
+            } else if (completion) {
+                completion(image, error, cacheType, imageURL);
+            }
+        }];
+    };
+    weakTryScale = tryScale;
+
+    tryScale(scale);
+}
+
+- (void)setRetinaImageWithURL:(NSURL *)url placeholderImage:(nullable UIImage *)placeholder {
+    [self setRetinaImageWithURL:url placeholderImage:placeholder completed:nil];
 }
 
 @end

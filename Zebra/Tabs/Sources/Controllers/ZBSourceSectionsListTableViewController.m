@@ -85,11 +85,12 @@
     imageView.contentMode = UIViewContentModeScaleAspectFit;
     imageView.cornerRadius = 5;
     imageView.layer.masksToBounds = YES;
-    
-    [imageView sd_setImageWithURL:[source iconURL] placeholderImage:[UIImage imageNamed:@"Unknown"] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+
+    __weak UIImageView *weakImageView = imageView;
+    [imageView setRetinaImageWithURL:[source iconURL] placeholderImage:[UIImage imageNamed:@"Unknown"] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (image && !error) {
-                [imageView setIconImage:image variant:MIIconVariantSettings];
+                [weakImageView setIconImage:image variant:MIIconVariantSettings];
             }
             else {
                 self.navigationItem.titleView = nil;
@@ -378,7 +379,7 @@
 - (ZBFeaturedCollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     ZBFeaturedCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"imageCell" forIndexPath:indexPath];
     NSDictionary *currentBanner = [self.featuredPackages objectAtIndex:indexPath.row];
-    [cell.imageView sd_setImageWithURL:currentBanner[@"url"] placeholderImage:[UIImage imageNamed:@"Unknown"]];
+    [cell.imageView setRetinaImageWithURL:[NSURL URLWithString:currentBanner[@"url"]] placeholderImage:[UIImage imageNamed:@"Unknown"]];
     cell.packageID = currentBanner[@"package"];
     [cell.titleLabel setText:currentBanner[@"title"]];
     return cell;

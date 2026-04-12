@@ -99,8 +99,6 @@ typedef NS_ENUM(NSUInteger, ZBPackageInfoOrder) {
 
     self.view.backgroundColor = [UIColor groupedTableViewBackgroundColor];
 
-    self.packageIcon.cornerRadius = 20;
-    self.packageIcon.layer.masksToBounds = YES;
     infos = [NSMutableDictionary new];
     [self setPackage];
 

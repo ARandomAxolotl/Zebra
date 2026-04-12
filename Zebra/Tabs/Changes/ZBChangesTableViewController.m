@@ -21,6 +21,7 @@
 #import "ZBPackageDepictionViewController.h"
 #import "UIColor+GlobalColors.h"
 #import "NSURLSession+Zebra.h"
+#import "UIImageView+Zebra.h"
 
 @import SDWebImage;
 
@@ -359,7 +360,7 @@
     cell.postTitle.text = post.title;
     cell.postTag.text = [post.tags capitalizedString];
     cell.redditLink = [NSURL URLWithString:post.url] ?: [NSURL URLWithString:@"https://www.reddit.com/r/jailbreak"];
-    [cell.backgroundImage sd_setImageWithURL:[NSURL URLWithString:post.thumbnail] placeholderImage:[UIImage imageNamed:@"banner"]];
+    [cell.backgroundImage setRetinaImageWithURL:[NSURL URLWithString:post.thumbnail] placeholderImage:[UIImage imageNamed:@"banner"]];
     return cell;
 }
 
