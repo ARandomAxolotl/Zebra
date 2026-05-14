@@ -579,11 +579,11 @@ typedef NS_ENUM(NSUInteger, ZBConsoleFinishOption) {
                 font = UIFont.boldMonospaceFont;
                 break;
             case ZBLogLevelError:
-                color = [UIColor redColor];
+                color = [UIColor systemRedColor];
                 font = UIFont.boldMonospaceFont;
                 break;
             case ZBLogLevelWarning:
-                color = [UIColor yellowColor];
+                color = [UIColor systemYellowColor];
                 font = UIFont.monospaceFont;
                 break;
         }

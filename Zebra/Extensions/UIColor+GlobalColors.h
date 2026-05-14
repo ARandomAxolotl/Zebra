@@ -31,4 +31,5 @@
 + (UIColor *)systemPurpleColor;
 + (UIColor *)systemTealColor;
 + (UIColor *)systemOrangeColor;
++ (UIColor *)systemYellowColor;
 @end
