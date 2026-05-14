@@ -15,7 +15,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ZBQueuePackageTableViewCell : UITableViewCell
--(void)setPackage:(ZBPackage *)package onQueue:(ZBQueue *)queue;
+- (void)setPackage:(ZBPackage *)package onQueue:(ZBQueue *)queue;
 @end
 
 NS_ASSUME_NONNULL_END

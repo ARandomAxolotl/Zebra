@@ -22,6 +22,7 @@
 #import "NSURLSession+Zebra.h"
 #import "ZBCanisterPrivacyViewController.h"
 #import "UIImageView+Zebra.h"
+#import "ZBCanisterDownloadIngests.h"
 
 #if DEBUG
 @import FLEX;
@@ -70,10 +71,10 @@ typedef enum ZBInfoOrder : NSUInteger {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshCollection:) name:@"refreshCollection" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toggleFeatured) name:@"toggleFeatured" object:nil];
-    
+
     [self.navigationItem setTitle:NSLocalizedString(@"Home", @"")];
     self.defaults = [NSUserDefaults standardUserDefaults];
     [self.tableView registerClass:[ZBHomeCopyableFooterView class] forHeaderFooterViewReuseIdentifier:@"infoFooter"];
@@ -107,40 +108,21 @@ typedef enum ZBInfoOrder : NSUInteger {
     if (@available(iOS 11.0, *)) {
         self.navigationController.navigationBar.prefersLargeTitles = YES;
     }
-    
-    NSURL *canisterURL = [[NSURL alloc] initWithString:@"https://api.canister.me/v2/"];
-    [[[NSURLSession zbra_standardSession] dataTaskWithURL:canisterURL completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        if (!data) {
+
+    [self _checkCanisterPrivacyPolicy];
+}
+
+- (void)_checkCanisterPrivacyPolicy {
+    [ZBCanisterIngest checkCanisterPrivacyPolicyWithCompletion:^(NSURL *newPrivacyPolicyURL) {
+        if (!newPrivacyPolicyURL) {
             return;
         }
-        NSError *serializationError;
-        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&serializationError];
-        if (serializationError || !dict) {
-            return;
-        }
-        NSDictionary *data_dict = [dict objectForKey:@"data"];
-        if (!data_dict) {
-            return;
-        }
-        NSDictionary *info = [data_dict objectForKey:@"reference"];
-        if (!info) {
-            return;
-        }
-        NSString *privacyPolicy = [info objectForKey:@"privacy_policy"];
-        if (!privacyPolicy) {
-            return;
-        }
-        NSURL *privacyPolicyURL = [[NSURL alloc] initWithString:privacyPolicy];
-        NSString *changedDate = [info objectForKey:@"privacy_updated"];
-        NSString *pastDate = [[NSUserDefaults standardUserDefaults] stringForKey:@"CanisterUpdateDate"];
-        if (![[NSUserDefaults standardUserDefaults] objectForKey:@"CanisterIngest"] || ![changedDate isEqualToString:pastDate]) {
-            [[NSUserDefaults standardUserDefaults] setObject:changedDate forKey:@"CanisterUpdateDate"];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                UIViewController *vc = [[ZBCanisterPrivacyViewController alloc] initWithURL:privacyPolicyURL];
-                [self presentViewController:vc animated:true completion:nil];
-            });
-        }
-    }] resume];
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            UIViewController *vc = [[ZBCanisterPrivacyViewController alloc] initWithURL:newPrivacyPolicyURL];
+            [self presentViewController:vc animated:YES completion:nil];
+        });
+    }];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

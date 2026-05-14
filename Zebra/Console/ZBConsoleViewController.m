@@ -235,7 +235,7 @@ typedef NS_ENUM(NSUInteger, ZBConsoleFinishOption) {
                 [installedPackageIdentifiers addObject:[package identifier]];
             }
 
-            [CanisterIngest ingestPackages:[queue packagesToInstall]];
+            [ZBCanisterIngest ingestPackages:[queue packagesToInstall]];
 
             for (NSArray <NSString *> *command in actions) {
                 if ([command count] == 1) {

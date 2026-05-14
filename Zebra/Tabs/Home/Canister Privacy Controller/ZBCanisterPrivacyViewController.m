@@ -8,8 +8,9 @@
 
 #import "ZBCanisterPrivacyViewController.h"
 #import "UIView+Zebra.h"
+#import "ZBDevice.h"
 
-@interface ZBCanisterPrivacyViewController ()
+@interface ZBCanisterPrivacyViewController () <SFSafariViewControllerDelegate>
 
 @end
 
@@ -21,7 +22,7 @@ NSURL *privacyPolicy;
     privacyPolicy = [[NSURL alloc] initWithString:@"https://canister.me/privacy"];
 }
 
--(instancetype)initWithURL:(NSURL *)url {
+- (instancetype)initWithURL:(NSURL *)url {
     privacyPolicy = url;
     return [self initWithNibName:nil bundle:nil];
 }
@@ -140,23 +141,22 @@ NSURL *privacyPolicy;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     
     self.view.backgroundColor = [UIColor groupedTableViewBackgroundColor];
 }
 
 - (void)openPrivacyPolicy {
-    [[UIApplication sharedApplication] openURL:privacyPolicy];
+    [ZBDevice openURL:privacyPolicy delegate:self];
 }
 
 - (void)openAccept {
-    [[NSUserDefaults standardUserDefaults] setObject:[[NSNumber alloc] initWithInt:1] forKey:@"CanisterIngest"];
-    [self dismissViewControllerAnimated:true completion:nil];
+    [ZBSettings setSendCanisterIngest:@(ZBSendCanisterIngestYes)];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
  
 - (void)openDecline {
-    [[NSUserDefaults standardUserDefaults] setObject:[[NSNumber alloc] initWithInt:0] forKey:@"CanisterIngest"];
-    [self dismissViewControllerAnimated:true completion:nil];
+    [ZBSettings setSendCanisterIngest:@(ZBSendCanisterIngestNo)];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

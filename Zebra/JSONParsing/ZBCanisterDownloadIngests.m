@@ -8,54 +8,91 @@
 
 #import "ZBCanisterDownloadIngests.h"
 #import "NSURLSession+Zebra.h"
+#import "ZBSettings.h"
 
-@implementation CanisterPackage
+@implementation ZBCanisterPackage
 
--(instancetype)initWithPackage:(ZBPackage *_Nonnull)package {
-    if (self = [super init]) {
-        self.package_id = package.identifier;
-        self.package_version = package.version;
+- (instancetype)initWithPackage:(ZBPackage *)package {
+    self = [super init];
+    if (self) {
+        self.packageID = package.identifier;
+        self.packageVersion = package.version;
+
         if (package.authorEmail && package.authorName) {
-            self.package_author = [NSString stringWithFormat:@"%@ <%@>", package.authorName, package.authorEmail];
-        } else if (package.authorEmail) {
-            self.package_author = package.authorEmail;
-        } else if (package.authorName) {
-            self.package_author = package.authorName;
+            self.packageAuthor = [NSString stringWithFormat:@"%@ <%@>", package.authorName, package.authorEmail];
         } else {
-            self.package_author = @"Unknown";
+            self.packageAuthor = package.authorEmail ?: package.authorName ?: @"Unknown";
         }
-        self.package_maintainer = self.package_author;
-        ZBSource *source = package.source;
-        if (source) {
-            self.repostiory_uri = [source repositoryURI];
-        } else {
-            self.repostiory_uri = NULL;
-        }
+
+        self.packageMaintainer = self.packageAuthor;
+        self.repositoryURL = package.source.repositoryURI;
     }
     return self;
 }
 
--(NSDictionary *)dictionary {
+- (NSDictionary *)dictionary {
     return @{
-        @"package_id": self.package_id ?: [NSNull null],
-        @"package_version": self.package_version ?: [NSNull null],
-        @"package_author": self.package_author ?: [NSNull null],
-        @"package_maintainer": self.package_maintainer ?: [NSNull null],
-        @"repository_uri": self.repostiory_uri ?: [NSNull null]
+        @"package_id": self.packageID ?: [NSNull null],
+        @"package_version": self.packageVersion ?: [NSNull null],
+        @"package_author": self.packageAuthor ?: [NSNull null],
+        @"package_maintainer": self.packageMaintainer ?: [NSNull null],
+        @"repository_uri": self.repositoryURL ?: [NSNull null]
     };
 }
 
 @end
 
-@implementation CanisterIngest
+@implementation ZBCanisterIngest
 
-+(void)ingestPackages:(NSArray<ZBPackage *>*)packages {
-    if (![[NSUserDefaults standardUserDefaults] integerForKey:@"CanisterIngest"]) {
++ (void)checkCanisterPrivacyPolicyWithCompletion:(void (^)(NSURL  * _Nullable))completion {
+    NSURL *canisterURL = [[NSURL alloc] initWithString:@"https://api.canister.me/v2/"];
+    [[[NSURLSession zbra_standardSession] dataTaskWithURL:canisterURL completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        if (!data) {
+            completion(nil);
+            return;
+        }
+        NSError *serializationError;
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&serializationError];
+        if (serializationError || !dict) {
+            completion(nil);
+            return;
+        }
+        NSDictionary *dataDict = dict[@"data"];
+        if (!dataDict) {
+            completion(nil);
+            return;
+        }
+        NSDictionary *info = dataDict[@"reference"];
+        if (!info) {
+            completion(nil);
+            return;
+        }
+        NSString *privacyPolicy = info[@"privacy_policy"];
+        if (!privacyPolicy) {
+            completion(nil);
+            return;
+        }
+        NSURL *privacyPolicyURL = [[NSURL alloc] initWithString:privacyPolicy];
+        NSString *changedDate = info[@"privacy_updated"];
+        NSString *pastDate = [ZBSettings canisterUpdateDate];
+
+        BOOL needsUpdate = [ZBSettings sendCanisterIngest] == ZBSendCanisterIngestUnspecified || ![changedDate isEqualToString:pastDate];
+        if (needsUpdate) {
+            [ZBSettings setCanisterUpdateDate:changedDate];
+            completion(privacyPolicyURL);
+        } else {
+            completion(nil);
+        }
+    }] resume];
+}
+
++ (void)ingestPackages:(NSArray<ZBPackage *>*)packages {
+    if ([ZBSettings sendCanisterIngest] != ZBSendCanisterIngestYes) {
         return;
     }
     NSMutableArray<NSDictionary *> *canisterPackages = [NSMutableArray new];
     for (ZBPackage *package in packages) {
-        [canisterPackages addObject:[[CanisterPackage alloc] initWithPackage:package].dictionary];
+        [canisterPackages addObject:[[ZBCanisterPackage alloc] initWithPackage:package].dictionary];
     }
     NSError *error;
     NSData *data = [NSJSONSerialization dataWithJSONObject:canisterPackages options:NSJSONWritingFragmentsAllowed error:&error];

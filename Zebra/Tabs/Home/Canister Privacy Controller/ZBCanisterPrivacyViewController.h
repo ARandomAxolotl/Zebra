@@ -12,7 +12,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ZBCanisterPrivacyViewController : UIViewController
--(instancetype)initWithURL:(NSURL *)url;
+- (instancetype)initWithURL:(NSURL *)url;
 @end
 
 NS_ASSUME_NONNULL_END

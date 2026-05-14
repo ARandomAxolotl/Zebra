@@ -63,7 +63,7 @@
     // Configure the view for the selected state
 }
 
--(void)setPackage:(ZBPackage *)package onQueue:(ZBQueue *)queue {
+- (void)setPackage:(ZBPackage *)package onQueue:(ZBQueue *)queue {
     if ([package dependencyOf].count > 0 || [package hasIssues] || [package removedBy] != nil || ([package isEssentialOrRequired] && [queue contains:package inQueue:ZBQueueTypeRemove]))  {
         self.accessoryType = UITableViewCellAccessoryDetailButton;
     }

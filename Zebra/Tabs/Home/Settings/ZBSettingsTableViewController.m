@@ -515,7 +515,7 @@ enum ZBMiscOrder {
 
 - (void)canisterPolicy {
     UIViewController *vc = [[ZBCanisterPrivacyViewController alloc] initWithNibName:nil bundle:nil];
-    [self presentViewController:vc animated:true completion:nil];
+    [self presentViewController:vc animated:YES completion:nil];
 }
 
 - (void)showRefreshView:(NSNumber *)dropTables {

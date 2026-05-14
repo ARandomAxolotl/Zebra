@@ -16,7 +16,6 @@
 //Old settings keys
 #define oledModeKey @"oledMode"
 #define tintSelectionKey @"tintSelection"
-#define thirteenModeKey @"thirteenMode"
 #define randomFeaturedKey @"randomFeatured"
 #define wantsFeaturedKey @"wantsFeatured"
 #define wantsNewsKey @"wantsNews"
@@ -80,6 +79,14 @@ typedef NS_ENUM(NSInteger, ZBSendErrorReports) {
     ZBSendErrorReportsUnspecified = -1,
     ZBSendErrorReportsNo,
     ZBSendErrorReportsYes
+};
+
+#pragma mark - Canister
+
+typedef NS_ENUM(NSInteger, ZBSendCanisterIngest) {
+    ZBSendCanisterIngestUnspecified = -1,
+    ZBSendCanisterIngestNo,
+    ZBSendCanisterIngestYes
 };
 
 NS_ASSUME_NONNULL_BEGIN
@@ -194,6 +201,14 @@ extern NSString *const SendErrorReportsKey;
 
 + (ZBSendErrorReports)sendErrorReports;
 + (void)setSendErrorReports:(NSNumber *)sendErrorReports;
+
+#pragma mark - Canister
+
++ (ZBSendCanisterIngest)sendCanisterIngest;
++ (void)setSendCanisterIngest:(NSNumber *)sendCanisterIngest;
+
++ (NSString *)canisterUpdateDate;
++ (void)setCanisterUpdateDate:(NSString *)canisterUpdateDate;
 
 @end
 

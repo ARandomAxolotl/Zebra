@@ -54,6 +54,9 @@ NSString *const PackageSortingTypeKey = @"PackageSortingType";
 
 NSString *const SendErrorReportsKey = @"SendErrorReports";
 
+NSString *const SendCanisterIngestKey = @"CanisterIngest";
+NSString *const CanisterUpdateDateKey = @"CanisterUpdateDate";
+
 + (void)load {
     [super load];
     
@@ -624,6 +627,25 @@ NSString *const SendErrorReportsKey = @"SendErrorReports";
 
 + (void)setSendErrorReports:(NSNumber *)sendErrorReports {
     [[NSUserDefaults standardUserDefaults] setObject:sendErrorReports forKey:SendErrorReportsKey];
+}
+
+#pragma mark - Canister
+
++ (ZBSendCanisterIngest)sendCanisterIngest {
+    NSNumber *value = [[NSUserDefaults standardUserDefaults] objectForKey:SendCanisterIngestKey];
+    return (value ?: @-1).integerValue;
+}
+
++ (void)setSendCanisterIngest:(NSNumber *)sendCanisterIngest {
+    [[NSUserDefaults standardUserDefaults] setObject:sendCanisterIngest forKey:SendCanisterIngestKey];
+}
+
++ (NSString *)canisterUpdateDate {
+    return [[NSUserDefaults standardUserDefaults] objectForKey:CanisterUpdateDateKey];
+}
+
++ (void)setCanisterUpdateDate:(NSString *)canisterUpdateDate {
+    [[NSUserDefaults standardUserDefaults] setObject:canisterUpdateDate forKey:CanisterUpdateDateKey];
 }
 
 @end

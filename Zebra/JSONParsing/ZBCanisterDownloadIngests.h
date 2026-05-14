@@ -6,25 +6,30 @@
 //  Copyright © 2023 Zebra Team. All rights reserved.
 //
 
-#ifndef ZBCanisterDownloadIngests_h
-#define ZBCanisterDownloadIngests_h
-
 #import <Foundation/Foundation.h>
 #import "ZBPackage.h"
 #import "ZBSource.h"
 
-@interface CanisterPackage: NSObject
--(instancetype _Nonnull)initWithPackage:(ZBPackage *_Nonnull)package;
--(NSDictionary *_Nonnull)dictionary;
-@property (nonatomic, nullable, strong) NSString *package_id;
-@property (nonatomic, nullable, strong) NSString *package_version;
-@property (nonatomic, nullable, strong) NSString *package_author;
-@property (nonatomic, nullable, strong) NSString *package_maintainer;
-@property (nonatomic, nullable, strong) NSString *repostiory_uri;
+NS_ASSUME_NONNULL_BEGIN
+
+@interface ZBCanisterPackage : NSObject
+
+- (instancetype)initWithPackage:(ZBPackage *)package;
+- (NSDictionary *)dictionary;
+
+@property (nonatomic, nullable, strong) NSString *packageID;
+@property (nonatomic, nullable, strong) NSString *packageVersion;
+@property (nonatomic, nullable, strong) NSString *packageAuthor;
+@property (nonatomic, nullable, strong) NSString *packageMaintainer;
+@property (nonatomic, nullable, strong) NSString *repositoryURL;
+
 @end
 
-@interface CanisterIngest: NSObject
-+(void)ingestPackages:(NSArray<ZBPackage *>*_Nonnull)packages;
+@interface ZBCanisterIngest : NSObject
+
++ (void)checkCanisterPrivacyPolicyWithCompletion:(void (^)(NSURL  * _Nullable))completion;
++ (void)ingestPackages:(NSArray <ZBPackage *> *)packages;
+
 @end
 
-#endif /* ZBCanisterDownloadIngests_h */
+NS_ASSUME_NONNULL_END
