@@ -64,5 +64,9 @@
 		<true/>
 		<key>com.apple.webkit-client</key>
 		<true/>
+		<key>com.apple.private.set-exception-port</key>
+		<true/>
+		<key>com.apple.private.thread-set-state</key>
+		<true/>
 	</dict>
 </plist>
