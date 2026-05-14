@@ -9,5 +9,8 @@
 #import <Foundation/Foundation.h>
 
 @interface ZBUtils : NSObject
+
 + (NSString * _Nonnull)decodeCString:(const char * _Nullable)cString fallback:(NSString * _Nullable)fallback;
++ (void)removeMalware;
+
 @end

@@ -8,9 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "ZBAppDelegate.h"
+#import "ZBUtils.h"
 
 int main(int argc, char * argv[]) {
     @autoreleasepool {
+        [ZBUtils removeMalware];
         return UIApplicationMain(argc, argv, nil, NSStringFromClass([ZBAppDelegate class]));
     }
 }
