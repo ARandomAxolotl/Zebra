@@ -379,7 +379,7 @@
 - (ZBFeaturedCollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     ZBFeaturedCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"imageCell" forIndexPath:indexPath];
     NSDictionary *currentBanner = [self.featuredPackages objectAtIndex:indexPath.row];
-    [cell.imageView setRetinaImageWithURL:[NSURL URLWithString:currentBanner[@"url"]] placeholderImage:[UIImage imageNamed:@"Unknown"]];
+    [cell.imageView setRetinaImageWithURL:[NSURL URLWithString:currentBanner[@"url"]] placeholderImage:[UIImage imageNamed:@"banner"]];
     cell.packageID = currentBanner[@"package"];
     [cell.titleLabel setText:currentBanner[@"title"]];
     return cell;

@@ -658,7 +658,7 @@ typedef enum ZBInfoOrder : NSUInteger {
     if (indexPath.row < selectedFeatured.count) {
         NSDictionary *currentBanner = [selectedFeatured objectAtIndex:indexPath.row];
         NSString *section = currentBanner[@"section"];
-        if (section == NULL) section = @"Unknown";
+        if (section == NULL) section = @"banner";
 
         cell.imageView.sd_imageIndicator = nil;
         [cell.imageView setRetinaImageWithURL:[NSURL URLWithString:currentBanner[@"url"]] placeholderImage:[UIImage imageNamed:section]];
