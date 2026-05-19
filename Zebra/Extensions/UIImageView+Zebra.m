@@ -95,15 +95,18 @@
     }
 
     UIScreen *screen = self.window.screen ?: [UIScreen mainScreen];
-    CGSize scaledSize = CGSizeMake(size * screen.scale, size * screen.scale);
+    CGRect rect = CGRectMake(0, 0, size, size);
 
-    if (!CGSizeEqualToSize(image.size, scaledSize)) {
-        UIGraphicsBeginImageContextWithOptions(scaledSize, NO, screen.scale);
-        CGRect rect = CGRectMake(0, 0, scaledSize.width, scaledSize.height);
-        [image drawInRect:rect];
-        image = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-    }
+    UIGraphicsBeginImageContextWithOptions(rect.size, NO, screen.scale);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+
+    [[UIColor whiteColor] setFill];
+    CGContextFillRect(context, rect);
+
+    [image drawInRect:rect];
+
+    image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
 
     self.image = [image _applicationIconImageForFormat:variant precomposed:YES scale:screen.scale];
 }
