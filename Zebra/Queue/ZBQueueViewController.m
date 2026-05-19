@@ -94,7 +94,7 @@
 #pragma mark - Button actions
 
 - (IBAction)dismissQueue:(id)sender {
-    [[ZBAppDelegate tabBarController] closeQueue];
+    [[ZBAppDelegate tabBarController] dismissQueue];
 }
 
 - (IBAction)clearQueue:(id)sender {

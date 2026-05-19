@@ -238,12 +238,6 @@
 - (UINavigationController *)popupController {
     if (!_popupController) {
         _popupController = [[UINavigationController alloc] initWithRootViewController:self.queueController];
-
-        if (@available(iOS 15, *)) {
-            UISheetPresentationController *sheetPresentation = _popupController.sheetPresentationController;
-            sheetPresentation.detents = @[[UISheetPresentationControllerDetent mediumDetent]];
-            self.queueController.sheetController = sheetPresentation;
-        }
     }
 
     return _popupController;
@@ -273,7 +267,12 @@
 
 - (void)updateQueueBar {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self updateQueueBarPackageCount:[ZBQueue count]];
+        int count = [ZBQueue count];
+        [self updateQueueBarPackageCount:count];
+
+        if (count == 0) {
+            return;
+        }
 
 #ifdef __IPHONE_26_0
         if (@available(iOS 26, *)) {
@@ -313,6 +312,10 @@
             return;
         }
 #endif
+
+        if (!self->_popupController) {
+            return;
+        }
 
         self.popupController.popupItem.title = title;
         self.popupController.popupItem.subtitle = subtitle;
@@ -400,6 +403,10 @@
     }
 }
 
+- (void)dismissQueue {
+    [self closePopupAnimated:YES completion:nil];
+}
+
 - (void)closeQueue {
     dispatch_async(dispatch_get_main_queue(), ^{
 #ifdef __IPHONE_26_0
@@ -418,6 +425,7 @@
             [[NSNotificationCenter defaultCenter] postNotificationName:@"ZBDatabaseCompletedUpdate" object:nil];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"ZBUpdateNavigationButtons" object:nil];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"ZBQueueBarHeightDidChange" object:nil];
+            return;
         }
 #endif
 
