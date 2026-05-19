@@ -141,10 +141,9 @@
 
 - (void)textViewDidChange:(UITextView *)textView {
     // check if it is URL or not
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"http(s)?://((\\w)|([0-9])|([-|_]))+(\\.|/)+((\\w)|([0-9])|([-|_]))+" options:NSRegularExpressionCaseInsensitive
-    error:nil];
-    NSTextCheckingResult *match = [regex firstMatchInString:textView.text options:0 range:NSMakeRange(0, textView.text.length)];
-    
+    NSDataDetector *detector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error:nil];
+    NSTextCheckingResult *match = [detector firstMatchInString:textView.text options:0 range:NSMakeRange(0, textView.text.length)];
+
     [self.addButton setEnabled:match != nil];
 }
 
