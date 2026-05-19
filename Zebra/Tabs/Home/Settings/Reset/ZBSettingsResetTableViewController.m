@@ -97,7 +97,7 @@
 #pragma mark - Button Actions
 
 - (void)restartSpringBoard:(NSIndexPath *)indexPath {
-    [self confirmationControllerWithTitle:NSLocalizedString(@"Restart SpringBoard", @"") message:NSLocalizedString(@"Are you sure you want to restart the SpringBoard?", @"") callback:^{
+    [self confirmationControllerWithTitle:NSLocalizedString(@"Restart SpringBoard", @"") message:nil callback:^{
         [ZBDevice restartSpringBoard];
     } indexPath:indexPath];
 }
@@ -201,18 +201,18 @@
 }
 
 - (void)confirmationControllerWithTitle:(NSString *)title message:(NSString *)message callback:(void(^)(void))callback indexPath:(NSIndexPath *)indexPath {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:[self alertControllerStyle]];
-    
-    UIAlertAction *yesAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Yes", @"") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:[self alertControllerStyle]];
+
+    UIAlertAction *yesAction = [UIAlertAction actionWithTitle:title ?: NSLocalizedString(@"OK", @"") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
         dispatch_async(dispatch_get_main_queue(), ^{
             callback();
         });
     }];
     [alert addAction:yesAction];
-    
-    UIAlertAction *noAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"No", @"") style:UIAlertActionStyleCancel handler:nil];
+
+    UIAlertAction *noAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"") style:UIAlertActionStyleCancel handler:nil];
     [alert addAction:noAction];
-    
+
     dispatch_async(dispatch_get_main_queue(), ^{
         [self presentViewController:alert animated:YES completion:nil];
     });
