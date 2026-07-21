@@ -133,8 +133,12 @@
     UITableViewHeaderFooterView *view = [[UITableViewHeaderFooterView alloc] initWithReuseIdentifier:@"alphabeticalReuse"];
     view.textLabel.font = [UIFont boldSystemFontOfSize:15];
     view.textLabel.textColor = [UIColor primaryTextColor];
-    view.contentView.backgroundColor = [UIColor tableViewBackgroundColor];
-        
+
+    if (@available(iOS 13, *)) {
+    } else {
+        view.contentView.backgroundColor = [UIColor tableViewBackgroundColor];
+    }
+
     return view;
 }
 
