@@ -10,6 +10,7 @@
 
 #import "UIColor+GlobalColors.h"
 #import "UIImage+Private.h"
+#import "ZBAppDelegate.h"
 #import <UIKit/UIKit.h>
 
 @import LNPopupController;
@@ -129,19 +130,20 @@
             [[NSNotificationCenter defaultCenter] postNotificationName:@"darkMode" object:self];
         }
         else if (@available(iOS 13.0, *)) {
+            UIWindow *window = [ZBAppDelegate window];
             if (![ZBSettings usesSystemAppearance]) {
                 switch ([self interfaceStyle]) {
                     case ZBInterfaceStyleLight:
-                        [[UIApplication sharedApplication] windows][0].overrideUserInterfaceStyle = UIUserInterfaceStyleLight;
+                        window.overrideUserInterfaceStyle = UIUserInterfaceStyleLight;
                         break;
                     case ZBInterfaceStyleDark:
                     case ZBInterfaceStylePureBlack:
-                        [[UIApplication sharedApplication] windows][0].overrideUserInterfaceStyle = UIUserInterfaceStyleDark;
+                        window.overrideUserInterfaceStyle = UIUserInterfaceStyleDark;
                         break;
                 }
             }
             else {
-                [[UIApplication sharedApplication] windows][0].overrideUserInterfaceStyle = UIUserInterfaceStyleUnspecified;
+                window.overrideUserInterfaceStyle = UIUserInterfaceStyleUnspecified;
             }
         }
     });

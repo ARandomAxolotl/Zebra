@@ -11,6 +11,14 @@
 
 @implementation UIView (Zebra)
 
+- (UIViewController *)viewController {
+    UIResponder *responder = self;
+    while (responder != nil && ![responder isKindOfClass:[UIViewController class]]) {
+        responder = responder.nextResponder;
+    }
+    return (UIViewController *)responder;
+}
+
 - (CGFloat)cornerRadius {
     return self.layer.cornerRadius;
 }

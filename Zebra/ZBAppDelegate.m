@@ -26,6 +26,7 @@
 #import <objc/runtime.h>
 #import "AccessibilityUtilities.h"
 #import "ZBSafariAuthenticationSession.h"
+#import "ZBSceneDelegate.h"
 
 #if __has_include("ZebraKeys.private.h")
 #import "ZebraKeys.private.h"
@@ -143,14 +144,32 @@ NSString *const ZBUserEndedScreenCaptureNotification = @"EndedScreenCaptureNotif
     return debs;
 }
 
++ (UIWindow *)window {
+    if (@available(iOS 13, *)) {
+        for (UIScene *scene in [UIApplication sharedApplication].connectedScenes) {
+            if (![scene isKindOfClass:[UIWindowScene class]]) {
+                continue;
+            }
+
+            id<UISceneDelegate> delegate = scene.delegate;
+            UIWindow *window = [(id<UIWindowSceneDelegate>)delegate window];
+            if (window) {
+                return window;
+            }
+        }
+    }
+
+    return ((ZBAppDelegate *)[[UIApplication sharedApplication] delegate]).window;
+}
+
 + (ZBTabBarController *)tabBarController {
     if ([NSThread isMainThread]) {
-        return (ZBTabBarController *)((ZBAppDelegate *)[[UIApplication sharedApplication] delegate]).window.rootViewController;
+        return (ZBTabBarController *)[self window].rootViewController;
     }
     else {
         __block ZBTabBarController *tabController;
         dispatch_sync(dispatch_get_main_queue(), ^{
-            tabController = (ZBTabBarController *)((ZBAppDelegate *)[[UIApplication sharedApplication] delegate]).window.rootViewController;
+            tabController = (ZBTabBarController *)[self window].rootViewController;
         });
         return tabController;
     }
@@ -159,7 +178,7 @@ NSString *const ZBUserEndedScreenCaptureNotification = @"EndedScreenCaptureNotif
 #pragma mark - Alerts
 
 + (void)sendAlertFrom:(UIViewController *)vc title:(NSString *)title message:(NSString *)message actionLabel:(NSString *)actionLabel okLabel:(NSString *)okLabel block:(void (^)(void))block {
-    UIViewController *trueVC = vc ? vc : [self tabBarController];
+    UIViewController *trueVC = vc ?: [self tabBarController];
     if (trueVC != NULL) {
         dispatch_async(dispatch_get_main_queue(), ^{
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
@@ -189,6 +208,27 @@ NSString *const ZBUserEndedScreenCaptureNotification = @"EndedScreenCaptureNotif
     [self sendErrorToTabController:error actionLabel:nil block:NULL];
 }
 
+#pragma mark - Window Configuration
+
++ (void)configureWindow:(UIWindow *)window withLaunchURL:(NSURL *)launchURL {
+    window.tintColor = [UIColor accentColor];
+    [[ZBThemeManager sharedInstance] updateInterfaceStyle];
+
+    if ([ZBDatabaseManager needsMigration]) {
+        if ([[launchURL scheme] isEqualToString:@"file"] && [[launchURL pathExtension] isEqualToString:@"list"]) {
+            NSString *listPath = [ZBAppDelegate sourcesListPath];
+            NSError *removeError;
+            if ([[NSFileManager defaultManager] fileExistsAtPath:listPath]) {
+                [[NSFileManager defaultManager] removeItemAtPath:listPath error:&removeError];
+            }
+            if (!removeError) {
+                [[NSFileManager defaultManager] moveItemAtPath:[launchURL path] toPath:listPath error:nil];
+            }
+        }
+        window.rootViewController = [[ZBRefreshViewController alloc] initWithDropTables:YES];
+    }
+}
+
 #pragma mark - App Delegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -198,7 +238,7 @@ NSString *const ZBUserEndedScreenCaptureNotification = @"EndedScreenCaptureNotif
     setenv("PATH", [ZBDevice path].UTF8String, 1);
 
     [SDImageCache sharedImageCache].config.maxDiskAge = kZebraMaxTime;
-    
+
     if (@available(iOS 10, *)) {
         [[UNUserNotificationCenter currentNotificationCenter] requestAuthorizationWithOptions:UNAuthorizationOptionAlert | UNAuthorizationOptionBadge
                                                                             completionHandler:^(BOOL granted, NSError * _Nullable error) {
@@ -210,34 +250,15 @@ NSString *const ZBUserEndedScreenCaptureNotification = @"EndedScreenCaptureNotif
         [application registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge
                                                                                         categories:nil]];
     }
-    
-    UIApplication.sharedApplication.delegate.window.tintColor = [UIColor accentColor];
-    
-    [[ZBThemeManager sharedInstance] updateInterfaceStyle];
-    
+
     [self registerForScreenshotNotifications];
-    
-    self.window.tintColor = [UIColor accentColor];
-    if ([ZBDatabaseManager needsMigration]) {
-        NSURL *url = launchOptions[UIApplicationLaunchOptionsURLKey];
-        if (url) {
-            if ([[url scheme] isEqualToString:@"file"] && [[url pathExtension] isEqualToString:@"list"]) {
-                NSString *listPath = [ZBAppDelegate sourcesListPath];
-                
-                NSError *removeError;
-                if ([[NSFileManager defaultManager] fileExistsAtPath:listPath]) {
-                    [[NSFileManager defaultManager] removeItemAtPath:listPath error:&removeError];
-                }
-                
-                if (!removeError) {
-                    [[NSFileManager defaultManager] moveItemAtPath:[url path] toPath:listPath error:nil];
-                }
-            }
-        }
-        
-        self.window.rootViewController = [[ZBRefreshViewController alloc] initWithDropTables:YES];
+
+    if (@available(iOS 13, *)) {
+        // Handled by ZBSceneDelegate
+    } else {
+        [ZBAppDelegate configureWindow:self.window withLaunchURL:launchOptions[UIApplicationLaunchOptionsURLKey]];
     }
-    
+
     if (@available(iOS 11, *)) {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkForScreenRecording:) name:UIScreenCapturedDidChangeNotification object:nil];
     } else {
@@ -249,11 +270,18 @@ NSString *const ZBUserEndedScreenCaptureNotification = @"EndedScreenCaptureNotif
     return YES;
 }
 
+- (UISceneConfiguration *)application:(UIApplication *)application configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession options:(UISceneConnectionOptions *)options API_AVAILABLE(ios(13.0)) {
+    UISceneConfiguration *sceneConfig = [[UISceneConfiguration alloc] initWithName:@"Default Configuration" sessionRole:connectingSceneSession.role];
+    sceneConfig.delegateClass = [ZBSceneDelegate class];
+    sceneConfig.storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    return sceneConfig;
+}
+
 - (BOOL)application:(UIApplication *)application openURL:(nonnull NSURL *)url options:(nonnull NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
     NSArray *choices = @[@"file", @"zbra", @"sileo"];
     int index = (int)[choices indexOfObject:[url scheme]];
     
-    if (![self.window.rootViewController isKindOfClass:[ZBTabBarController class]]) {
+    if (![[ZBAppDelegate window].rootViewController isKindOfClass:[ZBTabBarController class]]) {
         return NO;
     }
     
@@ -279,12 +307,12 @@ NSString *const ZBUserEndedScreenCaptureNotification = @"EndedScreenCaptureNotif
                     ZBPackageDepictionViewController *depicition = [[ZBPackageDepictionViewController alloc] initWithPackage:package];
                     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:depicition];
                     
-                    [self.window.rootViewController.presentedViewController dismissViewControllerAnimated:NO completion:nil];
-                    [self.window.rootViewController presentViewController:navController animated:YES completion:nil];
+                    [[ZBAppDelegate window].rootViewController.presentedViewController dismissViewControllerAnimated:NO completion:nil];
+                    [[ZBAppDelegate window].rootViewController presentViewController:navController animated:YES completion:nil];
                     [[ZBDatabaseManager sharedInstance] setHaltDatabaseOperations:YES];
                 }
             } else if ([[url pathExtension] isEqualToString:@"list"] || [[url pathExtension] isEqualToString:@"sources"]) {
-                ZBTabBarController *tabController = (ZBTabBarController *)self.window.rootViewController;
+                ZBTabBarController *tabController = (ZBTabBarController *)[ZBAppDelegate window].rootViewController;
                 [tabController setSelectedIndex:ZBTabSources];
                     
                 ZBSourceListTableViewController *sourceListController = (ZBSourceListTableViewController *)((UINavigationController *)[tabController selectedViewController]).viewControllers[0];
@@ -293,7 +321,7 @@ NSString *const ZBUserEndedScreenCaptureNotification = @"EndedScreenCaptureNotif
             break;
         }
         case 1: { // zbra
-            ZBTabBarController *tabController = (ZBTabBarController *)self.window.rootViewController;
+            ZBTabBarController *tabController = (ZBTabBarController *)[ZBAppDelegate window].rootViewController;
             
             NSArray *components = [[url host] componentsSeparatedByString:@"/"];
             choices = @[@"home", @"sources", @"changes", @"packages", @"search"];
@@ -383,11 +411,11 @@ NSString *const ZBUserEndedScreenCaptureNotification = @"EndedScreenCaptureNotif
 }
 
 - (void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler {
-    if (![self.window.rootViewController isKindOfClass:[ZBTabBarController class]]) {
+    if (![[ZBAppDelegate window].rootViewController isKindOfClass:[ZBTabBarController class]]) {
         return;
     }
     
-    ZBTabBarController *tabController = (ZBTabBarController *)self.window.rootViewController;
+    ZBTabBarController *tabController = (ZBTabBarController *)[ZBAppDelegate window].rootViewController;
     if ([shortcutItem.type isEqualToString:@"Search"]) {
         [tabController setSelectedIndex:ZBTabSearch];
         
@@ -466,7 +494,7 @@ NSString *const ZBUserEndedScreenCaptureNotification = @"EndedScreenCaptureNotif
 #if SENTRY && !DEBUG
 #ifdef SENTRY_DSN
     // Don’t init Sentry when people sideload Zebra (for some reason)
-    if (![[NSBundle mainBundle].bundleIdentifier isEqualToString:@PRODUCT_BUNDLE_IDENTIFIER]) {
+    if (![[ZBAppDelegate bundleID] isEqualToString:@PRODUCT_BUNDLE_IDENTIFIER]) {
         return;
     }
 

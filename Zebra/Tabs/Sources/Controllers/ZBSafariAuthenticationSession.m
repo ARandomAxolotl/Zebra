@@ -8,6 +8,7 @@
 
 #import "ZBSafariAuthenticationSession.h"
 #import "UIColor+GlobalColors.h"
+#import "ZBAppDelegate.h"
 
 NSString *const ZBSafariAuthenticationErrorDomain = @"ZBSafariAuthenticationErrorDomain";
 
@@ -67,7 +68,7 @@ static ZBSafariAuthenticationSession *currentSession = nil;
         _safariViewController.view.tintColor = tintColor;
     }
 
-    UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    UIViewController *rootViewController = [ZBAppDelegate window].rootViewController;
     [rootViewController presentViewController:_safariViewController animated:YES completion:nil];
     currentSession = self;
 }

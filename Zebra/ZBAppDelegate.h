@@ -25,6 +25,10 @@ extern NSString * const ZBUserEndedScreenCaptureNotification;
 + (NSString *)sourcesListPath;
 + (NSString *)databaseLocation;
 + (NSString *)debsLocation;
+
++ (UIWindow *)window;
++ (void)configureWindow:(UIWindow *)window withLaunchURL:(NSURL *)launchURL;
+
 + (void)sendAlertFrom:(UIViewController *)vc message:(NSString *)message;
 + (void)sendErrorToTabController:(NSString *)error;
 + (ZBTabBarController *)tabBarController;

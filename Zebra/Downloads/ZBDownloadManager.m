@@ -593,7 +593,7 @@
     NSDictionary *prefixes = @{
         @200: @"🆗",
         @304: @"👍",
-        @404: @"🤷‍♀️"
+        @404: @"🤷"
     };
     NSLog(@"[DownloadManager] %@ %@ %@ → %li %@", prefixes[@(response.statusCode)] ?: @"❌", request.HTTPMethod, request.URL, response.statusCode, error ?: @"");
 #endif

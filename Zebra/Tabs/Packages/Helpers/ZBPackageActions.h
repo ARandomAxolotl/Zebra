@@ -17,10 +17,10 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ZBPackageActions : NSObject
-+ (void)performAction:(ZBPackageActionType)action forPackages:(NSArray <ZBPackage *> *)package completion:(void (^)(void))completion;
-+ (void)barButtonItemForPackage:(ZBPackage *)package completion:(void (^)(UIBarButtonItem *barButton))completion;
++ (void)performAction:(ZBPackageActionType)action forPackages:(NSArray <ZBPackage *> *)package fromViewController:(UIViewController *)viewController completion:(void (^)(void))completion;
++ (void)barButtonItemForPackage:(ZBPackage *)package fromViewController:(UIViewController *)viewController completion:(void (^)(UIBarButtonItem *barButton))completion;
 + (NSArray <UITableViewRowAction *> *)rowActionsForPackage:(ZBPackage *)package inTableView:(UITableView *)tableView;
-+ (NSArray <UIAlertAction *> *)alertActionsForPackage:(ZBPackage *)package;
++ (NSArray <UIAlertAction *> *)alertActionsForPackage:(ZBPackage *)package fromViewController:(UIViewController *)viewController;
 + (NSArray <UIPreviewAction *> *)previewActionsForPackage:(ZBPackage *)package inTableView:(UITableView *_Nullable)tableView;
 + (NSArray <UIAction *> *)menuElementsForPackage:(ZBPackage *)package inTableView:(UITableView *_Nullable)tableView API_AVAILABLE(ios(13.0));
 @end

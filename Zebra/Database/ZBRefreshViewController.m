@@ -249,7 +249,7 @@ typedef enum {
             }];
         }
         else {
-            [[[UIApplication sharedApplication] windows][0] setRootViewController:[[ZBTabBarController alloc] init]];
+            [[ZBAppDelegate window] setRootViewController:[[ZBTabBarController alloc] init]];
         }
     }
 }

@@ -55,6 +55,7 @@
 		4E9022732F74CC6200827C72 /* FLEX in Frameworks */ = {isa = PBXBuildFile; productRef = 4E9022722F74CC6200827C72 /* FLEX */; };
 		4E9FC84C278EA57100934FFE /* ZBChangelogEntryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E9FC84B278EA57100934FFE /* ZBChangelogEntryCell.m */; };
 		4EA26E9727CBA3190019A5AA /* ZBHomeCopyableFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EA26E9627CBA3190019A5AA /* ZBHomeCopyableFooterView.m */; };
+		4EBC4ABD2FD7EB10002178AF /* ZBSceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EBC4ABC2FD7EB10002178AF /* ZBSceneDelegate.m */; };
 		4EC7F26927AE34E00078F953 /* ZBCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EC7F26827AE34E00078F953 /* ZBCommand.m */; };
 		4ECB1DF52948C9FD0049FE08 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4ECB1DF32948C9FD0049FE08 /* InfoPlist.strings */; };
 		4EF1A33F2F7901B3004A1017 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 4EF1A33E2F7901B3004A1017 /* Sentry */; };
@@ -95,7 +96,6 @@
 		89A1B735223C97210053D0E2 /* ZBTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 89A1B734223C97210053D0E2 /* ZBTabBarController.m */; };
 		89AD450423CA4F010008831F /* UIImageView+Zebra.m in Sources */ = {isa = PBXBuildFile; fileRef = 89AD450323CA4F010008831F /* UIImageView+Zebra.m */; };
 		89AD450F23CA6D260008831F /* ZBSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 89AD450E23CA6D260008831F /* ZBSettings.m */; };
-		89C4244D24411C1100FE5ED8 /* UIAlertController+Show.m in Sources */ = {isa = PBXBuildFile; fileRef = 89C4244C24411C1100FE5ED8 /* UIAlertController+Show.m */; };
 		89C5FDE221B1B13700A10E58 /* ZBAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 89C5FDE121B1B13700A10E58 /* ZBAppDelegate.m */; };
 		89C5FDE521B1B13700A10E58 /* ZBRefreshViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 89C5FDE421B1B13700A10E58 /* ZBRefreshViewController.m */; };
 		89C5FDE821B1B13700A10E58 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 89C5FDE621B1B13700A10E58 /* Main.storyboard */; };
@@ -225,6 +225,8 @@
 		4E9FC84B278EA57100934FFE /* ZBChangelogEntryCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZBChangelogEntryCell.m; sourceTree = "<group>"; };
 		4EA26E9527CBA3190019A5AA /* ZBHomeCopyableFooterView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZBHomeCopyableFooterView.h; sourceTree = "<group>"; };
 		4EA26E9627CBA3190019A5AA /* ZBHomeCopyableFooterView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZBHomeCopyableFooterView.m; sourceTree = "<group>"; };
+		4EBC4ABB2FD7EB0E002178AF /* ZBSceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZBSceneDelegate.h; sourceTree = "<group>"; };
+		4EBC4ABC2FD7EB10002178AF /* ZBSceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZBSceneDelegate.m; sourceTree = "<group>"; };
 		4EC7F26727AE34E00078F953 /* ZBCommand.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZBCommand.h; sourceTree = "<group>"; };
 		4EC7F26827AE34E00078F953 /* ZBCommand.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZBCommand.m; sourceTree = "<group>"; };
 		4EC7F26F27AE35030078F953 /* ZBCommandDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZBCommandDelegate.h; sourceTree = "<group>"; };
@@ -341,8 +343,6 @@
 		89AD450E23CA6D260008831F /* ZBSettings.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZBSettings.m; sourceTree = "<group>"; };
 		89B76A51235F8FF6006900FE /* ZBStage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZBStage.h; sourceTree = "<group>"; };
 		89C112A12400E7A200854713 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Localizable.strings; sourceTree = "<group>"; };
-		89C4244B24411C1100FE5ED8 /* UIAlertController+Show.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIAlertController+Show.h"; sourceTree = "<group>"; };
-		89C4244C24411C1100FE5ED8 /* UIAlertController+Show.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIAlertController+Show.m"; sourceTree = "<group>"; };
 		89C5FDDD21B1B13700A10E58 /* Zebra.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Zebra.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		89C5FDE021B1B13700A10E58 /* ZBAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZBAppDelegate.h; sourceTree = "<group>"; };
 		89C5FDE121B1B13700A10E58 /* ZBAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZBAppDelegate.m; sourceTree = "<group>"; };
@@ -819,8 +819,6 @@
 				8937CA3023C3DFD400A4644C /* UINavigationBar+Progress.m */,
 				89AD450223CA4F010008831F /* UIImageView+Zebra.h */,
 				89AD450323CA4F010008831F /* UIImageView+Zebra.m */,
-				89C4244B24411C1100FE5ED8 /* UIAlertController+Show.h */,
-				89C4244C24411C1100FE5ED8 /* UIAlertController+Show.m */,
 				C3BF92BE2449144E00D903A7 /* UIFont+Zebra.h */,
 				C3BF92BF2449144E00D903A7 /* UIFont+Zebra.m */,
 				A5122E6724641D3E0059E434 /* ZBTableViewController.h */,
@@ -861,6 +859,8 @@
 				89C5FDEF21B1B13800A10E58 /* main.m */,
 				89C5FDE021B1B13700A10E58 /* ZBAppDelegate.h */,
 				89C5FDE121B1B13700A10E58 /* ZBAppDelegate.m */,
+				4EBC4ABB2FD7EB0E002178AF /* ZBSceneDelegate.h */,
+				4EBC4ABC2FD7EB10002178AF /* ZBSceneDelegate.m */,
 				9EC4A24D22AABBC8005DDBC7 /* ZBDevice.h */,
 				9EC4A24E22AABBC8005DDBC7 /* ZBDevice.m */,
 				9E87F358231A20350043E7F2 /* ZBSettings.h */,
@@ -1280,7 +1280,6 @@
 				4E451A6A2834D3C600F6C282 /* ZBPaymentVendor.m in Sources */,
 				4EC7F26927AE34E00078F953 /* ZBCommand.m in Sources */,
 				365CAE2D22D3A13C0052ED6E /* ZBNewsCollectionViewCell.m in Sources */,
-				89C4244D24411C1100FE5ED8 /* UIAlertController+Show.m in Sources */,
 				89159FB021F8E5FD0012C8FE /* ZBPackageDepictionViewController.m in Sources */,
 				4E2E6C042826734B0089E4FB /* ZBLabelTextView.m in Sources */,
 				4E9FC84C278EA57100934FFE /* ZBChangelogEntryCell.m in Sources */,
@@ -1292,6 +1291,7 @@
 				89DD26862201571900CD31A0 /* ZBQueue.m in Sources */,
 				E1ED15FF2A34F9F20079E785 /* ZBCanisterDownloadIngests.m in Sources */,
 				89C5FDE221B1B13700A10E58 /* ZBAppDelegate.m in Sources */,
+				4EBC4ABD2FD7EB10002178AF /* ZBSceneDelegate.m in Sources */,
 				8991FFA221B215C9004FCE23 /* ZBDatabaseManager.m in Sources */,
 				89AD450423CA4F010008831F /* UIImageView+Zebra.m in Sources */,
 				897FFD4B23CFA4A30082DD31 /* ZBThemeManager.m in Sources */,
@@ -1455,6 +1455,7 @@
 				SDKROOT = iphoneos;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				VALID_ARCHS = "$(ARCHS_STANDARD)";
+				__DIAGNOSE_INVALID_DEPLOYMENT_TARGET_AS_ERROR = NO;
 			};
 			name = "Debug Rootless";
 		};
@@ -1565,6 +1566,7 @@
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "$(ARCHS_STANDARD)";
+				__DIAGNOSE_INVALID_DEPLOYMENT_TARGET_AS_ERROR = NO;
 			};
 			name = "Release Rootless";
 		};
@@ -1681,6 +1683,7 @@
 				SDKROOT = iphoneos;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				VALID_ARCHS = "$(ARCHS_STANDARD)";
+				__DIAGNOSE_INVALID_DEPLOYMENT_TARGET_AS_ERROR = NO;
 			};
 			name = Debug;
 		};
@@ -1744,6 +1747,7 @@
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "$(ARCHS_STANDARD)";
+				__DIAGNOSE_INVALID_DEPLOYMENT_TARGET_AS_ERROR = NO;
 			};
 			name = Release;
 		};

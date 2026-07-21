@@ -276,7 +276,7 @@
 - (void)upgradeAll {
     NSUInteger beforeCount = [ZBQueue count];
     
-    [ZBPackageActions performAction:ZBPackageActionUpgrade forPackages:updates completion:^{
+    [ZBPackageActions performAction:ZBPackageActionUpgrade forPackages:updates fromViewController:self completion:^{
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.tableView reloadRowsAtIndexPaths:[self.tableView indexPathsForVisibleRows] withRowAnimation:UITableViewRowAnimationNone];
             NSUInteger afterCount = [ZBQueue count];
