@@ -33,7 +33,7 @@ static ZBBootstrap bootstrap = ZBBootstrapUnknown;
 @implementation ZBDevice
 
 + (NSString *)userAgent {
-    return [NSString stringWithFormat:@"Zebra/%@ (%@; iOS/%@)", @PACKAGE_VERSION, [ZBDevice deviceType], [[UIDevice currentDevice] systemVersion]];
+    return [NSString stringWithFormat:@"Zebra/" @PACKAGE_VERSION @" (%@; iOS/%@)", [ZBDevice deviceType], [[UIDevice currentDevice] systemVersion]];
 }
 
 + (NSString *)downloadUserAgent {
@@ -49,9 +49,8 @@ static ZBBootstrap bootstrap = ZBBootstrapUnknown;
     } else {
         compatToken = @"Cydia/1.1.32 ";
     }
-    return [NSString stringWithFormat:@"%@Zebra/%@ %@",
+    return [NSString stringWithFormat:@"%@Zebra/" @PACKAGE_VERSION " %@",
             compatToken,
-            @PACKAGE_VERSION,
             self.themeName];
 }
 
@@ -483,10 +482,7 @@ static ZBBootstrap bootstrap = ZBBootstrapUnknown;
     // Construct a safe PATH. This will be set app-wide.
     NSArray <NSString *> *path = @[@"/usr/sbin", @"/usr/bin", @"/sbin", @"/bin"];
     if (isPrefixed) {
-        NSMutableArray <NSString *> *prefixedPath = [NSMutableArray array];
-        for (NSString *item in path) {
-            [prefixedPath addObject:[@INSTALL_PREFIX stringByAppendingPathComponent:item]];
-        }
+        NSArray <NSString *> *prefixedPath = @[@INSTALL_PREFIX @"/usr/sbin", @INSTALL_PREFIX @"/usr/bin", @INSTALL_PREFIX @"/sbin", @INSTALL_PREFIX @"/bin"];
         path = [prefixedPath arrayByAddingObjectsFromArray:path];
     }
     return [path componentsJoinedByString:@":"];
