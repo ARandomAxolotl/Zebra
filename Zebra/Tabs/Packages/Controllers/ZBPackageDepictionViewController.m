@@ -26,6 +26,8 @@
 #import <objc/runtime.h>
 
 @import SDWebImage;
+@import CoreServices;
+@import CoreSpotlight;
 
 typedef NS_ENUM(NSUInteger, ZBPackageInfoOrder) {
     ZBPackageInfoID = 0,
@@ -144,6 +146,11 @@ typedef NS_ENUM(NSUInteger, ZBPackageInfoOrder) {
     [self configureNavButton];
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self.userActivity resignCurrent];
+}
+
 - (BOOL)presented {
     return [self.navigationController.viewControllers[0] isEqual:self];
 }
@@ -246,8 +253,8 @@ typedef NS_ENUM(NSUInteger, ZBPackageInfoOrder) {
     }
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self layoutDepictionWebView:webView];
-        [self performSelector:@selector(layoutDepictionWebView:) withObject:webView afterDelay:1.0];
+        [self performSelector:@selector(layoutDepictionWebView:) withObject:webView afterDelay:0.0];
+        [self performSelector:@selector(layoutDepictionWebView:) withObject:webView afterDelay:0.5];
     });
 }
 
@@ -314,7 +321,7 @@ typedef NS_ENUM(NSUInteger, ZBPackageInfoOrder) {
         }
     }
 
-    [ZBPackageActions barButtonItemForPackage:package completion:^(UIBarButtonItem *barButton) {
+    [ZBPackageActions barButtonItemForPackage:package fromViewController:self completion:^(UIBarButtonItem *barButton) {
         self->navButtonsBeingConfigured = NO;
 
         if ([self presented]) {
@@ -435,6 +442,44 @@ typedef NS_ENUM(NSUInteger, ZBPackageInfoOrder) {
     }
 }
 
+- (void)configureUserActivity {
+    NSString *activityType = [NSString stringWithFormat:@"%@.package-activity", [ZBAppDelegate bundleID]];
+    NSUserActivity *userActivity = [[NSUserActivity alloc] initWithActivityType:activityType];
+    userActivity.eligibleForHandoff = YES;
+    userActivity.eligibleForSearch = YES;
+    userActivity.title = package.name;
+    userActivity.webpageURL = package.depictionURL;
+    userActivity.userInfo = @{
+        @"packageID": package.identifier
+    };
+    userActivity.requiredUserInfoKeys = [NSSet setWithObject:@"packageID"];
+
+    if (@available(iOS 11, *)) {
+        userActivity.referrerURL = [[NSURL URLWithString:@"zbra://package/"] URLByAppendingPathComponent:package.identifier];
+    }
+    if (@available(iOS 12, *)) {
+        userActivity.eligibleForPrediction = YES;
+        userActivity.persistentIdentifier = package.identifier;
+    }
+    if (@available(iOS 13, *)) {
+        userActivity.targetContentIdentifier = package.identifier;
+    }
+
+    NSMutableSet *keywords = [NSMutableSet set];
+    [keywords addObjectsFromArray:[package.name componentsSeparatedByString:@" "]];
+    [keywords addObjectsFromArray:[package.authorName componentsSeparatedByString:@" "]];
+    userActivity.keywords = keywords;
+
+    CSSearchableItemAttributeSet *attributes = [[CSSearchableItemAttributeSet alloc] initWithItemContentType:(__bridge NSString *)kUTTypeCompositeContent];
+    attributes.title = package.name;
+    attributes.contentDescription = package.shortDescription ?: package.authorName;
+    attributes.authorNames = package.authorName ? @[package.authorName] : nil;
+    attributes.keywords = [keywords sortedArrayUsingDescriptors:@[]];
+
+    self.userActivity = userActivity;
+    [self.userActivity becomeCurrent];
+}
+
 - (void)setPackage {
     [self readIcon:package];
     [self readAuthor:package];
@@ -446,6 +491,7 @@ typedef NS_ENUM(NSUInteger, ZBPackageInfoOrder) {
     [self setMoreByText:package];
     infos[@(ZBPackageInfoWishList)] = @"";
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self configureUserActivity];
 }
 
 - (void)showSupportSelection:(UIView *)sender {

@@ -310,6 +310,10 @@
 	<false/>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	<key>NSUserActivityTypes</key>
+	<array>
+		<string>$(PRODUCT_BUNDLE_IDENTIFIER).package-activity</string>
+	</array>
 	<key>UTImportedTypeDeclarations</key>
 	<array>
 		<dict>

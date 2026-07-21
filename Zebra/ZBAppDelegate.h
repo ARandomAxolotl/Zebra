@@ -32,5 +32,7 @@ extern NSString * const ZBUserEndedScreenCaptureNotification;
 + (void)sendAlertFrom:(UIViewController *)vc message:(NSString *)message;
 + (void)sendErrorToTabController:(NSString *)error;
 + (ZBTabBarController *)tabBarController;
+
+- (BOOL)continueUserActivity:(NSUserActivity *)userActivity;
 @end
 

@@ -266,7 +266,15 @@ NSString *const ZBUserEndedScreenCaptureNotification = @"EndedScreenCaptureNotif
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkForScreenRecording:) name:UIScreenDidDisconnectNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkForScreenRecording:) name:UIScreenModeDidChangeNotification object:nil];
     }
-    
+
+    NSDictionary *userActivityDict = launchOptions[UIApplicationLaunchOptionsUserActivityDictionaryKey];
+    if (userActivityDict) {
+        NSUserActivity *userActivity = userActivityDict[UIApplicationLaunchOptionsUserActivityTypeKey];
+        if (userActivity) {
+            [self continueUserActivity:userActivity];
+        }
+    }
+
     return YES;
 }
 
@@ -427,6 +435,31 @@ NSString *const ZBUserEndedScreenCaptureNotification = @"EndedScreenCaptureNotif
         ZBSourceListTableViewController *sourceListController = (ZBSourceListTableViewController *)((UINavigationController *)[tabController selectedViewController]).viewControllers[0];
         [sourceListController handleURL:[NSURL URLWithString:@"zbra://sources/add"]]; 
     }
+}
+
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray <id <UIUserActivityRestoring>> *))restorationHandler {
+    return [self continueUserActivity:userActivity];
+}
+
+- (BOOL)continueUserActivity:(NSUserActivity *)userActivity {
+    NSString *bundleID = [ZBAppDelegate bundleID];
+    if ([userActivity.activityType isEqualToString:[NSString stringWithFormat:@"%@.package-activity", bundleID]]) {
+        NSString *packageID = userActivity.userInfo[@"packageID"];
+        if (packageID) {
+            ZBPackage *package = [[ZBDatabaseManager sharedInstance] topVersionForPackageID:packageID];
+            ZBPackageDepictionViewController *packageController = [[ZBPackageDepictionViewController alloc] initWithPackage:package];
+            if (packageController) {
+                UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:packageController];
+                ZBTabBarController *tabController = (ZBTabBarController *)[ZBAppDelegate window].rootViewController;
+                [tabController presentViewController:navController animated:YES completion:nil];
+                return YES;
+            } else {
+                [ZBAppDelegate sendErrorToTabController:[NSString stringWithFormat:NSLocalizedString(@"Could not locate %@", @""), packageID]];
+            }
+        }
+    }
+
+    return NO;
 }
 
 #pragma mark - Screenshot

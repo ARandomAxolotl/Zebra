@@ -24,6 +24,11 @@ API_AVAILABLE(ios(13.0))
     [self.window makeKeyAndVisible];
 
     [ZBAppDelegate configureWindow:self.window withLaunchURL:connectionOptions.URLContexts.anyObject.URL];
+
+    if (connectionOptions.userActivities.count > 0) {
+        NSUserActivity *userActivity = [connectionOptions.userActivities anyObject];
+        [self._appDelegate continueUserActivity:userActivity];
+    }
 }
 
 - (void)scene:(UIScene *)scene openURLContexts:(NSSet<UIOpenURLContext *> *)urlContexts {
@@ -42,6 +47,10 @@ API_AVAILABLE(ios(13.0))
 - (void)windowScene:(UIWindowScene *)windowScene performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler {
     UIApplication *app = [UIApplication sharedApplication];
     [self._appDelegate application:app performActionForShortcutItem:shortcutItem completionHandler:completionHandler];
+}
+
+- (void)scene:(UIScene *)scene continueUserActivity:(NSUserActivity *)userActivity {
+    [self._appDelegate continueUserActivity:userActivity];
 }
 
 @end
