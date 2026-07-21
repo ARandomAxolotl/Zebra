@@ -178,6 +178,10 @@ typedef NS_ENUM(NSUInteger, ZBConsoleFinishOption) {
 
     [self.navigationItem setHidesBackButton:YES];
 
+#ifdef __IPHONE_26_0
+    if (@available(iOS 26, *)) {
+    } else
+#endif
     if (@available(iOS 13.0, *)) {
         UINavigationBarAppearance *app = [self.navigationController.navigationBar.standardAppearance copy];
         app.backgroundEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
