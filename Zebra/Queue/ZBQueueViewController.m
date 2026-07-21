@@ -22,6 +22,7 @@
 @interface ZBQueueViewController () {
     ZBQueue *queue;
     NSArray <NSArray *> *packages;
+    BOOL _visualEffectViewAdded;
 }
 @end
 
@@ -46,11 +47,6 @@
         self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
     }
 
-    if (@available(iOS 13, *)) {
-        self.tableView.backgroundColor = [UIColor clearColor];
-        self.tableView.backgroundView = [[UIView alloc] init];
-    }
-
     if (@available(iOS 15, *)) {
         self.tableView.sectionHeaderTopPadding = 0.0;
 
@@ -66,7 +62,22 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+
+    if (@available(iOS 15, *)) {
+        self.tableView.backgroundColor = [UIColor clearColor];
+        self.tableView.backgroundView = [[UIView alloc] init];
+
+        if (@available(iOS 26, *)) {
+        } else if (!_visualEffectViewAdded) {
+            _visualEffectViewAdded = YES;
+
+            UIVisualEffectView *blurView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleSystemMaterial]];
+            blurView.frame = self.navigationController.view.bounds;
+            blurView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+            [self.navigationController.view insertSubview:blurView atIndex:0];
+        }
+    }
+
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor primaryTextColor]}];
     

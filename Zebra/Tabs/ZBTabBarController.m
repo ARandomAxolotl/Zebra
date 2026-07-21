@@ -34,7 +34,7 @@
 
 @import LNPopupController;
 
-@interface ZBTabBarController () {
+@interface ZBTabBarController () <UIAdaptivePresentationControllerDelegate> {
     NSMutableArray *errorMessages;
     ZBDatabaseManager *databaseManager;
     UIActivityIndicatorView *indicator;
@@ -43,6 +43,7 @@
 #endif
     BOOL sourcesUpdating;
     BOOL _queueBarVisible;
+    BOOL _queueSheetVisible;
 }
 
 @property (nonatomic) UINavigationController *popupController;
@@ -238,8 +239,11 @@
 - (UINavigationController *)popupController {
     if (!_popupController) {
         _popupController = [[UINavigationController alloc] initWithRootViewController:self.queueController];
+        if (@available(iOS 15, *)) {
+            UISheetPresentationController *sheetPresentation = _popupController.sheetPresentationController;
+            sheetPresentation.detents = @[[UISheetPresentationControllerDetent mediumDetent]];
+        }
     }
-
     return _popupController;
 }
 
@@ -313,15 +317,10 @@
         }
 #endif
 
-        if (!self->_popupController) {
-            return;
-        }
+        self.popupContentViewController.popupItem.title = title;
+        self.popupContentViewController.popupItem.subtitle = subtitle;
 
-        self.popupController.popupItem.title = title;
-        self.popupController.popupItem.subtitle = subtitle;
-
-        ZBQueueViewController *queue = self.popupController.viewControllers[0];
-        [queue refreshTable];
+        [self->_queueController refreshTable];
     });
 }
 
@@ -329,8 +328,11 @@
     dispatch_async(dispatch_get_main_queue(), ^{
 #ifdef __IPHONE_26_0
         if (@available(iOS 26, *)) {
-            if (openPopup) {
-                [self presentViewController:self.popupController animated:YES completion:nil];
+            if (openPopup && !self->_queueSheetVisible) {
+                self->_queueSheetVisible = YES;
+                UINavigationController *sheet = self.popupController;
+                [self presentViewController:sheet animated:YES completion:nil];
+                sheet.presentationController.delegate = self;
             }
 
             if (self->_queueBarVisible) {
@@ -354,6 +356,38 @@
             return;
         }
 #endif
+
+        if (@available(iOS 15, *)) {
+            if (openPopup && !self->_queueSheetVisible) {
+                self->_queueSheetVisible = YES;
+                UINavigationController *sheet = self.popupController;
+                [self presentViewController:sheet animated:YES completion:nil];
+                sheet.presentationController.delegate = self;
+            }
+
+            LNPopupPresentationState state = self.popupPresentationState;
+            if (state == LNPopupPresentationStateOpen || state == LNPopupPresentationStateBarPresented) {
+                return;
+            }
+
+            self.popupInteractionStyle = LNPopupInteractionStyleNone;
+            self.popupContentView.popupCloseButtonStyle = LNPopupCloseButtonStyleNone;
+
+            UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
+            [self.popupBar addGestureRecognizer:tapGestureRecognizer];
+
+            UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleHoldGesture:)];
+            longPress.minimumPressDuration = 1;
+            longPress.delegate = self;
+            [self.popupBar addGestureRecognizer:longPress];
+
+            [self updateQueueBarPackageCount:[ZBQueue count]];
+
+            [self presentPopupBarWithContentViewController:[[UIViewController alloc] init] openPopup:NO animated:YES completion:^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"ZBQueueBarHeightDidChange" object:nil];
+            }];
+            return;
+        }
 
         LNPopupPresentationState state = self.popupPresentationState;
         if ((openPopup && state == LNPopupPresentationStateOpen) || (!openPopup && (state == LNPopupPresentationStateOpen || state == LNPopupPresentationStateBarPresented))) {
@@ -403,7 +437,26 @@
     }
 }
 
+- (void)_dismissQueueSheet {
+    if (_queueSheetVisible) {
+        _queueSheetVisible = NO;
+        [_popupController dismissViewControllerAnimated:YES completion:nil];
+        _popupController = nil;
+        _queueController = nil;
+    }
+}
+
+- (void)presentationControllerDidDismiss:(UIPresentationController *)presentationController {
+    _queueSheetVisible = NO;
+    _popupController = nil;
+    _queueController = nil;
+}
+
 - (void)dismissQueue {
+    if (@available(iOS 15, *)) {
+        [self _dismissQueueSheet];
+        return;
+    }
     [self closePopupAnimated:YES completion:nil];
 }
 
@@ -417,10 +470,7 @@
 
             [self setBottomAccessory:nil animated:YES];
             self->_queueBarVisible = NO;
-            self.popupController = nil;
-            if (self.presentedViewController) {
-                [self dismissViewControllerAnimated:YES completion:nil];
-            }
+            [self _dismissQueueSheet];
 
             [[NSNotificationCenter defaultCenter] postNotificationName:@"ZBDatabaseCompletedUpdate" object:nil];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"ZBUpdateNavigationButtons" object:nil];
@@ -429,11 +479,16 @@
         }
 #endif
 
+        if (@available(iOS 15, *)) {
+            [self _dismissQueueSheet];
+        }
+
         LNPopupPresentationState state = self.popupPresentationState;
         if (state == LNPopupPresentationStateOpen || state == LNPopupPresentationStateBarPresented) {
             [[NSNotificationCenter defaultCenter] postNotificationName:@"ZBDatabaseCompletedUpdate" object:nil];
             [self dismissPopupBarAnimated:YES completion:^{
                 self.popupController = nil;
+                self->_queueController = nil;
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"ZBUpdateNavigationButtons" object:nil];
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"ZBQueueBarHeightDidChange" object:nil];
             }];
