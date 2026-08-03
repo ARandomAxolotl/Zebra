@@ -28,8 +28,10 @@
 
 #ifdef __IPHONE_26_0
     if (@available(iOS 26, *)) {
-        self.cornerConfiguration = [UICornerConfiguration configurationWithUniformRadius:[UICornerRadius containerConcentricRadiusWithMinimum:cornerRadius]];
-        return;
+        if ([self respondsToSelector:@selector(setCornerConfiguration:)]) {
+            self.cornerConfiguration = [UICornerConfiguration configurationWithUniformRadius:[UICornerRadius containerConcentricRadiusWithMinimum:cornerRadius]];
+            return;
+        }
     }
 #endif
     
