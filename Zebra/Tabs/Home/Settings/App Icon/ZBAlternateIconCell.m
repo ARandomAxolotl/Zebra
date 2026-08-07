@@ -8,7 +8,8 @@
 
 #import "ZBAlternateIconCell.h"
 
-#import "UIImageView+Zebra.h"
+#import "UIImage+Private.h"
+#import "MobileIcons.h"
 
 @implementation ZBAlternateIconCell {
     UIStackView *_stackView;
@@ -59,14 +60,7 @@
     for (NSDictionary <NSString *, id> *item in iconSet[@"icons"]) {
         // Nil selected icon means the default icon is currently active.
         BOOL isSelected = [item[@"iconName"] isEqualToString:selectedIconName ?: @"AppIcon"];
-#ifdef ROOTLESS
-        NSString *iconName = item[@"iconName"];
-        if ([iconName isEqualToString:@"AppIcon"]) {
-            iconName = @"AppIcon60x60";
-        }
-#else
-        NSString *iconName = [item[@"iconName"] stringByAppendingString:@"60x60"];
-#endif
+        NSString *iconName = [item[@"iconName"] stringByAppendingString:@"-preview"];
         UIImage *image = [[UIImage imageNamed:iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
 
         UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -76,8 +70,12 @@
         button.accessibilityTraits = isSelected ? UIAccessibilityTraitSelected : kNilOptions;
         button.userInteractionEnabled = !isSelected;
         button.tag = i;
-        [button.imageView setIconImage:image variant:MIIconVariantDefault];
         [button addTarget:self action:@selector(iconTapped:) forControlEvents:UIControlEventTouchUpInside];
+
+        UIScreen *screen = self.window.screen ?: [UIScreen mainScreen];
+        UIImage *iconImage = [[image _applicationIconImageForFormat:MIIconVariantDefault precomposed:YES scale:screen.scale] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        [button setImage:iconImage forState:UIControlStateNormal];
+
         if (isSelected) {
             UIImageView *tickImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"selection-tick"]];
             tickImageView.translatesAutoresizingMaskIntoConstraints = NO;

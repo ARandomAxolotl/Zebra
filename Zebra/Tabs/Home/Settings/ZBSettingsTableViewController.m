@@ -161,11 +161,7 @@ enum ZBMiscOrder {
             cell.label.text = NSLocalizedString(@"App Icon", @"");
             
             NSDictionary *icon = [ZBAlternateIconController iconForName:[[UIApplication sharedApplication] alternateIconName]];
-#ifdef ROOTLESS
-            NSString *iconName = icon[@"iconName"];
-#else
-            NSString *iconName = [icon[@"iconName"] stringByAppendingString:@"60x60"];
-#endif
+            NSString *iconName = [icon[@"iconName"] stringByAppendingString:@"-preview"];
             UIImage *iconImage = [[UIImage imageNamed:iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
             [cell setAppIcon:iconImage];
             
