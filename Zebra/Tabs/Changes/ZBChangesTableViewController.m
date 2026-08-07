@@ -64,6 +64,11 @@
             [self registerForPreviewingWithDelegate:self sourceView:self.view];
         }
     }
+    if (@available(iOS 26, *)) {
+    } else {
+        self.navigationController.navigationBar.preservesSuperviewLayoutMargins = YES;
+    }
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTable) name:@"ZBDatabaseCompletedUpdate" object:nil];
     self.redditPosts = [NSMutableArray new];
     defaults = [NSUserDefaults standardUserDefaults];

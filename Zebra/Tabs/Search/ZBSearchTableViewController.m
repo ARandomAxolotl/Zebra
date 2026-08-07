@@ -55,6 +55,11 @@
         self.tableView.tableHeaderView = searchController.searchBar;
     }
 
+    if (@available(iOS 26, *)) {
+    } else {
+        self.navigationController.navigationBar.preservesSuperviewLayoutMargins = YES;
+    }
+
     self.title = NSLocalizedString(@"Search", @"");
     self.definesPresentationContext = YES;
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;

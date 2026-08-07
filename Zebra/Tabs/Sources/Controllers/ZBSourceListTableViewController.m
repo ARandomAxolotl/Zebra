@@ -59,7 +59,12 @@
     if (@available(iOS 11.0, *)) {
         self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeAlways;
     }
-    
+
+    if (@available(iOS 26, *)) {
+    } else {
+        self.navigationController.navigationBar.preservesSuperviewLayoutMargins = YES;
+    }
+
     [self.tableView registerNib:[UINib nibWithNibName:@"ZBSourceTableViewCell" bundle:nil] forCellReuseIdentifier:@"sourceTableViewCell"];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(delewhoop:) name:@"deleteSourceTouchAction" object:nil];

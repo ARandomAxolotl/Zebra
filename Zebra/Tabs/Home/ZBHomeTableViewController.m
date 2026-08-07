@@ -103,6 +103,11 @@ typedef enum ZBInfoOrder : NSUInteger {
         self.navigationController.navigationBar.prefersLargeTitles = YES;
     }
 
+    if (@available(iOS 26, *)) {
+    } else {
+        self.navigationController.navigationBar.preservesSuperviewLayoutMargins = YES;
+    }
+
     [self _checkCanisterPrivacyPolicy];
 }
 
