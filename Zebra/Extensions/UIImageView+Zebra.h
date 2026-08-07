@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UIImageView (Zebra)
 
+@property (nonatomic, copy, nullable, setter=zb_setImageURL:) NSURL *zb_imageURL;
+
 - (void)applyBorder;
 - (void)removeBorder;
 - (void)setColor:(UIColor *)color;

@@ -81,6 +81,7 @@
         }];
     }
     else {
+        imageView.zb_imageURL = nil;
         [imageView setIconImage:sectionImage variant:variant];
     }
 }

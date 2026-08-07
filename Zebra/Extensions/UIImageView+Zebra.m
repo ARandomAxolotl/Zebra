@@ -11,8 +11,19 @@
 #import "UIView+Private.h"
 #import "UIImage+Private.h"
 #import <SDWebImage/SDWebImage.h>
+#import <objc/runtime.h>
+
+static const void *ZBImageURLKey = &ZBImageURLKey;
 
 @implementation UIImageView (Zebra)
+
+- (NSURL *)zb_imageURL {
+    return objc_getAssociatedObject(self, ZBImageURLKey);
+}
+
+- (void)zb_setImageURL:(NSURL *)url {
+    objc_setAssociatedObject(self, ZBImageURLKey, url, OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
 
 - (void)applyBorder {
     self.layer.borderColor = [UIColor imageBorderColor].CGColor;
@@ -133,12 +144,22 @@
 }
 
 - (void)setRetinaImageWithURL:(NSURL *)url placeholderImage:(nullable UIImage *)placeholder completed:(nullable SDExternalCompletionBlock)completion {
+    self.zb_imageURL = url;
+
     NSString *urlString = url.absoluteString;
 
     // If the URL already has a scaled suffix, use it as-is
     NSRegularExpression *scalePattern = [NSRegularExpression regularExpressionWithPattern:@"@[0-9]+x\\.[^.]+$" options:0 error:nil];
     if ([scalePattern firstMatchInString:urlString options:kNilOptions range:NSMakeRange(0, urlString.length)]) {
-        [self sd_setImageWithURL:url placeholderImage:placeholder completed:completion];
+        __weak typeof(self) weakSelf = self;
+        [self sd_setImageWithURL:url placeholderImage:placeholder completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            if (![weakSelf.zb_imageURL isEqual:url]) {
+                return;
+            }
+            if (completion) {
+                completion(image, error, cacheType, imageURL);
+            }
+        }];
         return;
     }
 
@@ -158,6 +179,10 @@
         }
 
         [weakSelf sd_setImageWithURL:candidate placeholderImage:placeholder completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            if (![weakSelf.zb_imageURL isEqual:url]) {
+                return;
+            }
+
             if (error && currentScale > 1) {
                 strongTryScale(currentScale - 1);
             } else if (completion) {

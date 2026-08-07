@@ -646,11 +646,12 @@
         }];
     }
     else {
+        imageView.zb_imageURL = nil;
         [imageView setIconImage:sectionImage variant:variant];
     }
 }
 
-- (NSArray * _Nullable)possibleActions {    
+- (NSArray * _Nullable)possibleActions {
     if ([[self source] sourceID] == -1) {
         return nil; // No actions for virtual dependencies
     }
