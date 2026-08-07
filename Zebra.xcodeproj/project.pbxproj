@@ -50,7 +50,6 @@
 		4E451A6D2837402900F6C282 /* ZBTokenManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E451A6C2837402900F6C282 /* ZBTokenManager.m */; };
 		4E58162E28D60DB700EEF97F /* ZBHomeDemoNoticeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E58162D28D60DB700EEF97F /* ZBHomeDemoNoticeCell.m */; };
 		4E5F8274274FAFE40074A0BC /* NSObject+Zebra.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E5F8273274FAFE40074A0BC /* NSObject+Zebra.m */; };
-		4E62CECB3026476C00921C32 /* FLEX in Frameworks */ = {isa = PBXBuildFile; productRef = 4E9022722F74CC6200827C72 /* FLEX */; };
 		4E62CECD3026540700921C32 /* AppIcon60x60@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E62CECC3026540700921C32 /* AppIcon60x60@3x.png */; };
 		4E62CECF3026541500921C32 /* AppIcon60x60@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E62CECE3026541500921C32 /* AppIcon60x60@2x.png */; };
 		4E873D4F2838C7F600737732 /* NSURLSession+Zebra.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E873D4E2838C7F600737732 /* NSURLSession+Zebra.m */; };
@@ -430,7 +429,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4E62CECB3026476C00921C32 /* FLEX in Frameworks */,
 				899784402242D25800C1138C /* libbz2.tbd in Frameworks */,
 				895071992239E414004AE338 /* libMobileGestalt.tbd in Frameworks */,
 				4E2E6BE4281FC4080089E4FB /* SDWebImage in Frameworks */,
