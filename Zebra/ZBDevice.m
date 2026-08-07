@@ -338,53 +338,53 @@ static ZBBootstrap bootstrap = ZBBootstrapUnknown;
         return ZBJailbreakSimulated;
     }
 
-    NSDictionary <NSString *, NSNumber *> *jailbreakInstalledFiles = @{
-        @"/var/checkra1n.dmg":     @(ZBJailbreakCheckra1n),
-        @"/.installed_unc0ver":    @(ZBJailbreakUnc0ver),
-        @"/.installed_odyssey":    @(ZBJailbreakOdyssey),
-        @"/.installed_taurine":    @(ZBJailbreakTaurine),
-        @INSTALL_PREFIX @"/.installed_palera1n":  @(ZBJailbreakPalera1n), // 1.x
-        @INSTALL_PREFIX @"/.palecursus_strapped": @(ZBJailbreakPalera1n), // 2.x
-        @INSTALL_PREFIX @"/.installed_fugu15max": @(ZBJailbreakDopamine),
-        @INSTALL_PREFIX @"/.installed_dopamine":  @(ZBJailbreakDopamine),
-        @"/.installed_socket":     @(ZBJailbreakSocket),
-        @"/tmp/.jailbroken":       @(ZBJailbreakEverPwnage),
-        @"/everuntether":          @(ZBJailbreakEverUntether),
-        @"/.p0laris":              @(ZBJailbreakP0laris),
-        @"/.installed-openpwnage": @(ZBJailbreakOpenpwnage),
-        @"/.installed_home_depot": @(ZBJailbreakHomeDepot),
-        @"/.installed_mineekJB":   @(ZBJailbreakMineekJB),
-        @"/.installed_mineekJB32": @(ZBJailbreakMineekJB32),
-        @"/.installed_mineekJB64": @(ZBJailbreakMineekJB64),
-        @"/.blizzardJB":           @(ZBJailbreakBlizzard9),
-        @"/.installed_kok3shi":    @(ZBJailbreakKok3shi),
-        @"/.installed_kok3shiX":   @(ZBJailbreakKok3shiX),
-        @"/.meridian_installed":   @(ZBJailbreakMeridian),
-        @"/.installed_yaluX":      @(ZBJailbreakYalu),
-        @"/.installed_g0blin":     @(ZBJailbreakG0blin),
-        @"/.installed_p0insettia": @(ZBJailbreakP0insettia),
-        @"/cores/binpack/.installed_overlay": @(ZBJailbreakBakera1n),
-        @"/.installed_amethyst":   @(ZBJailbreakAmethyst),
-        @"/.installed_apex":       @(ZBJailbreakApex)
-    };
-    
-    NSDictionary <NSString *, NSNumber *> *jailbreakInstalledDirs = @{
-        @"/binpack":          @(ZBJailbreakCheckra1n),
-        @"/electra":          @(ZBJailbreakElectra),
-        @"/chimera":          @(ZBJailbreakChimera),
-        @"/var/Liy/xina":     @(ZBJailbreakXinaA15),
-        @"/var/root/iocaste": @(ZBJailbreakIocaste)
-    };
+    NSArray <NSArray <id> *> *jailbreakInstalledFiles = @[
+        @[@"/var/checkra1n.dmg",     @(ZBJailbreakCheckra1n)],
+        @[@"/.installed_unc0ver",    @(ZBJailbreakUnc0ver)],
+        @[@"/.installed_odyssey",    @(ZBJailbreakOdyssey)],
+        @[@"/.installed_taurine",    @(ZBJailbreakTaurine)],
+        @[@INSTALL_PREFIX @"/.installed_palera1n",  @(ZBJailbreakPalera1n)], // 1.x
+        @[@INSTALL_PREFIX @"/.palecursus_strapped", @(ZBJailbreakPalera1n)], // 2.x
+        @[@INSTALL_PREFIX @"/.installed_fugu15max", @(ZBJailbreakDopamine)],
+        @[@INSTALL_PREFIX @"/.installed_dopamine",  @(ZBJailbreakDopamine)],
+        @[@"/.installed_socket",     @(ZBJailbreakSocket)],
+        @[@"/tmp/.jailbroken",       @(ZBJailbreakEverPwnage)],
+        @[@"/everuntether",          @(ZBJailbreakEverUntether)],
+        @[@"/.p0laris",              @(ZBJailbreakP0laris)],
+        @[@"/.installed-openpwnage", @(ZBJailbreakOpenpwnage)],
+        @[@"/.installed_home_depot", @(ZBJailbreakHomeDepot)],
+        @[@"/.installed_mineekJB",   @(ZBJailbreakMineekJB)],
+        @[@"/.installed_mineekJB32", @(ZBJailbreakMineekJB32)],
+        @[@"/.installed_mineekJB64", @(ZBJailbreakMineekJB64)],
+        @[@"/.blizzardJB",           @(ZBJailbreakBlizzard9)],
+        @[@"/.installed_kok3shi",    @(ZBJailbreakKok3shi)],
+        @[@"/.installed_kok3shiX",   @(ZBJailbreakKok3shiX)],
+        @[@"/.meridian_installed",   @(ZBJailbreakMeridian)],
+        @[@"/.installed_yaluX",      @(ZBJailbreakYalu)],
+        @[@"/.installed_g0blin",     @(ZBJailbreakG0blin)],
+        @[@"/.installed_p0insettia", @(ZBJailbreakP0insettia)],
+        @[@"/cores/binpack/.installed_overlay", @(ZBJailbreakBakera1n)],
+        @[@"/.installed_amethyst",   @(ZBJailbreakAmethyst)],
+        @[@"/.installed_apex",       @(ZBJailbreakApex)]
+    ];
 
-    for (NSString *file in jailbreakInstalledFiles.allKeys) {
-        if ([self _isRegularFile:file]) {
-            return jailbreakInstalledFiles[file].integerValue;
+    NSArray <NSArray <id> *> *jailbreakInstalledDirs = @[
+        @[@"/binpack",          @(ZBJailbreakCheckra1n)],
+        @[@"/electra",          @(ZBJailbreakElectra)],
+        @[@"/chimera",          @(ZBJailbreakChimera)],
+        @[@"/var/Liy/xina",     @(ZBJailbreakXinaA15)],
+        @[@"/var/root/iocaste", @(ZBJailbreakIocaste)]
+    ];
+
+    for (NSArray <id> *item in jailbreakInstalledFiles) {
+        if ([self _isRegularFile:item[0]]) {
+            return ((NSNumber *)item[1]).integerValue;
         }
     }
 
-    for (NSString *dir in jailbreakInstalledDirs.allKeys) {
-        if ([self _isRegularDirectory:dir]) {
-            return jailbreakInstalledDirs[dir].integerValue;
+    for (NSArray <id> *item in jailbreakInstalledDirs) {
+        if ([self _isRegularDirectory:item[0]]) {
+            return ((NSNumber *)item[1]).integerValue;
         }
     }
 
