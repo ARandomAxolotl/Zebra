@@ -50,6 +50,9 @@
 		4E451A6D2837402900F6C282 /* ZBTokenManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E451A6C2837402900F6C282 /* ZBTokenManager.m */; };
 		4E58162E28D60DB700EEF97F /* ZBHomeDemoNoticeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E58162D28D60DB700EEF97F /* ZBHomeDemoNoticeCell.m */; };
 		4E5F8274274FAFE40074A0BC /* NSObject+Zebra.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E5F8273274FAFE40074A0BC /* NSObject+Zebra.m */; };
+		4E62CECB3026476C00921C32 /* FLEX in Frameworks */ = {isa = PBXBuildFile; productRef = 4E9022722F74CC6200827C72 /* FLEX */; };
+		4E62CECD3026540700921C32 /* AppIcon60x60@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E62CECC3026540700921C32 /* AppIcon60x60@3x.png */; };
+		4E62CECF3026541500921C32 /* AppIcon60x60@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E62CECE3026541500921C32 /* AppIcon60x60@2x.png */; };
 		4E873D4F2838C7F600737732 /* NSURLSession+Zebra.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E873D4E2838C7F600737732 /* NSURLSession+Zebra.m */; };
 		4E9022702F74C21000827C72 /* ZBQueueTabAccessoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E90226F2F74C21000827C72 /* ZBQueueTabAccessoryView.m */; };
 		4E9FC84C278EA57100934FFE /* ZBChangelogEntryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E9FC84B278EA57100934FFE /* ZBChangelogEntryCell.m */; };
@@ -214,6 +217,8 @@
 		4E58162D28D60DB700EEF97F /* ZBHomeDemoNoticeCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZBHomeDemoNoticeCell.m; sourceTree = "<group>"; };
 		4E5F8272274FAFE40074A0BC /* NSObject+Zebra.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+Zebra.h"; sourceTree = "<group>"; };
 		4E5F8273274FAFE40074A0BC /* NSObject+Zebra.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Zebra.m"; sourceTree = "<group>"; };
+		4E62CECC3026540700921C32 /* AppIcon60x60@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon60x60@3x.png"; sourceTree = "<group>"; };
+		4E62CECE3026541500921C32 /* AppIcon60x60@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon60x60@2x.png"; sourceTree = "<group>"; };
 		4E873D4D2838C7F600737732 /* NSURLSession+Zebra.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSURLSession+Zebra.h"; sourceTree = "<group>"; };
 		4E873D4E2838C7F600737732 /* NSURLSession+Zebra.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSURLSession+Zebra.m"; sourceTree = "<group>"; };
 		4E90226A2F73A9B200827C72 /* Zebra-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Zebra-Prefix.pch"; sourceTree = "<group>"; };
@@ -425,6 +430,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E62CECB3026476C00921C32 /* FLEX in Frameworks */,
 				899784402242D25800C1138C /* libbz2.tbd in Frameworks */,
 				895071992239E414004AE338 /* libMobileGestalt.tbd in Frameworks */,
 				4E2E6BE4281FC4080089E4FB /* SDWebImage in Frameworks */,
@@ -881,6 +887,8 @@
 				897FFD5223CFA4FA0082DD31 /* Theme */,
 				4E90226A2F73A9B200827C72 /* Zebra-Prefix.pch */,
 				89C5FDE921B1B13800A10E58 /* Assets.xcassets */,
+				4E62CECE3026541500921C32 /* AppIcon60x60@2x.png */,
+				4E62CECC3026540700921C32 /* AppIcon60x60@3x.png */,
 				89C5FDE621B1B13700A10E58 /* Main.storyboard */,
 				89C5FDEB21B1B13800A10E58 /* LaunchScreen.storyboard */,
 				89C5FDEE21B1B13800A10E58 /* Info.plist */,
@@ -1174,7 +1182,9 @@
 				89C5FDEA21B1B13800A10E58 /* Assets.xcassets in Resources */,
 				365CAE2E22D3A13C0052ED6E /* ZBNewsCollectionViewCell.xib in Resources */,
 				4E41394B278DC8F90006AB8B /* listicon@3x.png in Resources */,
+				4E62CECF3026541500921C32 /* AppIcon60x60@2x.png in Resources */,
 				4E41394C278DC8F90006AB8B /* sourcesicon.png in Resources */,
+				4E62CECD3026540700921C32 /* AppIcon60x60@3x.png in Resources */,
 				00ED302E235C23C5005E8302 /* Localizable.strings in Resources */,
 				4E41394D278DC8F90006AB8B /* listicon@2x.png in Resources */,
 				4E41394F278DC8F90006AB8B /* debicon@2x.png in Resources */,
