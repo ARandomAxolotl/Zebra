@@ -50,5 +50,10 @@ ifeq ($(ROOTLESS),1)
 	rm -r $(THEOS_STAGING_DIR)$(THEOS_PACKAGE_INSTALL_PREFIX)
 endif
 
+internal-package::
+ifeq ($(ROOTLESS),1)
+	sed -i '' 's!file:///!file://$(THEOS_PACKAGE_INSTALL_PREFIX)/!' $(THEOS_STAGING_DIR)/DEBIAN/control
+endif
+
 after-install::
 	install.exec 'uiopen zbra:'
