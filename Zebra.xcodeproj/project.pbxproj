@@ -52,13 +52,12 @@
 		4E5F8274274FAFE40074A0BC /* NSObject+Zebra.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E5F8273274FAFE40074A0BC /* NSObject+Zebra.m */; };
 		4E873D4F2838C7F600737732 /* NSURLSession+Zebra.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E873D4E2838C7F600737732 /* NSURLSession+Zebra.m */; };
 		4E9022702F74C21000827C72 /* ZBQueueTabAccessoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E90226F2F74C21000827C72 /* ZBQueueTabAccessoryView.m */; };
-		4E9022732F74CC6200827C72 /* FLEX in Frameworks */ = {isa = PBXBuildFile; productRef = 4E9022722F74CC6200827C72 /* FLEX */; };
 		4E9FC84C278EA57100934FFE /* ZBChangelogEntryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E9FC84B278EA57100934FFE /* ZBChangelogEntryCell.m */; };
 		4EA26E9727CBA3190019A5AA /* ZBHomeCopyableFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EA26E9627CBA3190019A5AA /* ZBHomeCopyableFooterView.m */; };
 		4EBC4ABD2FD7EB10002178AF /* ZBSceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EBC4ABC2FD7EB10002178AF /* ZBSceneDelegate.m */; };
 		4EC7F26927AE34E00078F953 /* ZBCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EC7F26827AE34E00078F953 /* ZBCommand.m */; };
 		4ECB1DF52948C9FD0049FE08 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4ECB1DF32948C9FD0049FE08 /* InfoPlist.strings */; };
-		4EF1A33F2F7901B3004A1017 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 4EF1A33E2F7901B3004A1017 /* Sentry */; };
+		4EF1A33F2F7901B3004A1017 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 4EF1A33E2F7901B3004A1017 /* Sentry */; settings = {ATTRIBUTES = (Weak, ); }; };
 		4EFE27B82F71035100913E39 /* UIView+Zebra.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EFE27B72F71035100913E39 /* UIView+Zebra.m */; };
 		7821AF6F2275F3A4006C0315 /* ZBAddSourceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7821AF6D2275F3A4006C0315 /* ZBAddSourceViewController.m */; };
 		8900FA502201E9C200476310 /* ZBQueueViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8900FA4F2201E9C200476310 /* ZBQueueViewController.m */; };
@@ -426,7 +425,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4E9022732F74CC6200827C72 /* FLEX in Frameworks */,
 				899784402242D25800C1138C /* libbz2.tbd in Frameworks */,
 				895071992239E414004AE338 /* libMobileGestalt.tbd in Frameworks */,
 				4E2E6BE4281FC4080089E4FB /* SDWebImage in Frameworks */,
@@ -1497,6 +1495,10 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.1.36;
+				OTHER_CFLAGS = (
+					"-framework",
+					FLEX,
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = xyz.willy.Zebra;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1787,6 +1789,10 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.1.36;
+				OTHER_CFLAGS = (
+					"-framework",
+					FLEX,
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = xyz.willy.Zebra;
 				PRODUCT_NAME = "$(TARGET_NAME)";

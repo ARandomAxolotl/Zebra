@@ -13,3 +13,7 @@
 #if __has_include("Sentry/SentrySDK.h")
     #define SENTRY
 #endif
+
+#if DEBUG && __has_include("FLEX/FLEX.h")
+    #define FLEX
+#endif

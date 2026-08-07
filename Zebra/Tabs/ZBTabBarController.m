@@ -24,10 +24,6 @@
 #import "ZBSettingsErrorReportingViewController.h"
 #import "ZBQueueTabAccessoryView.h"
 
-#if DEBUG
-@import FLEX;
-#endif
-
 #if SENTRY
 @import Sentry;
 #endif

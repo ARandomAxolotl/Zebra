@@ -24,7 +24,7 @@
 #import "UIImageView+Zebra.h"
 #import "ZBCanisterDownloadIngests.h"
 
-#if DEBUG
+#if FLEX
 @import FLEX;
 #endif
 
@@ -93,15 +93,9 @@ typedef enum ZBInfoOrder : NSUInteger {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(configureTheme) name:@"darkMode" object:nil];
     }
 
-#if DEBUG
+#if FLEX
     // Add FLEX toggle
-    UIBarButtonItem *flexBarItem;
-    if (@available(iOS 13, *)) {
-        flexBarItem = [[UIBarButtonItem alloc] initWithImage:[UIImage systemImageNamed:@"wrench.adjustable.fill"] style:UIBarButtonItemStylePlain target:[FLEXManager sharedManager] action:@selector(toggleExplorer)];
-    } else {
-        flexBarItem = [[UIBarButtonItem alloc] initWithTitle:@"FLEX" style:UIBarButtonItemStylePlain target:[FLEXManager sharedManager] action:@selector(toggleExplorer)];
-    }
-
+    UIBarButtonItem *flexBarItem = [[UIBarButtonItem alloc] initWithTitle:@"FLEX" style:UIBarButtonItemStylePlain target:[FLEXManager sharedManager] action:@selector(toggleExplorer)];
     self.navigationItem.rightBarButtonItems = [self.navigationItem.rightBarButtonItems arrayByAddingObject:flexBarItem];
 #endif
 
